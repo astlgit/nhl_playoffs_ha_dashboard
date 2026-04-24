@@ -6,7 +6,7 @@ Home Assistant custom integration and Lovelace dashboard for NHL playoff trackin
 
 - `custom_components/nhl_playoffs/` — Home Assistant integration files
 - `lovelace/nhl_playoffs_dashboard.yaml` — Lovelace dashboard configuration
-- `www/nhl/` — Local images folder (contains README with TBD image instructions)
+- `www/nhl/` — Local images folder (contains `tbd.png` placeholder and setup instructions)
 - `images/` — Screenshots for documentation
 - `hacs.json` — HACS repository metadata
 
@@ -90,7 +90,7 @@ If you install the cards through HACS, these URLs will be added automatically.
 - Keep `manifest.json` and `hacs.json` updated with any dependency or metadata changes.
 
 ## License
-**TBD Image Setup**: Copy the `tbd.png` file from `www/nhl/` to your Home Assistant `config/www/nhl/` folder. This image displays when playoff teams aren't determined yet.
+- **TBD Image Setup**: Copy `www/nhl/tbd.png` to your Home Assistant `config/www/nhl/` folder. This image displays when playoff teams aren't determined yet.
 - 
 This project is licensed under the **MIT License**. See the terms below:
 

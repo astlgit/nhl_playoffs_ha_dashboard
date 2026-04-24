@@ -1,8 +1,14 @@
 # TBD Placeholder Image
 
-This folder should contain the `tbd.png` image file.
+This folder contains the `tbd.png` image file for use when teams aren't determined in playoff rounds.
 
-## How to get the TBD image:
+## Installation:
+
+Copy `tbd.png` to your Home Assistant `config/www/nhl/` folder.
+
+The dashboard will then show this image at `/local/nhl/tbd.png` when teams haven't been determined for upcoming rounds.
+
+## If you need a different TBD image:
 
 1. **Download from NHL API**: If the NHL API provides a TBD image, download it from their CDN.
 
@@ -12,9 +18,3 @@ This folder should contain the `tbd.png` image file.
    - Format: PNG with transparent background
 
 3. **Find online**: Search for "TBD placeholder PNG" and download a suitable image.
-
-## Installation:
-
-Place the `tbd.png` file in your Home Assistant `config/www/nhl/` folder.
-
-The dashboard will then show this image when teams haven't been determined for upcoming rounds.
