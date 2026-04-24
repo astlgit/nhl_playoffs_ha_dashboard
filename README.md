@@ -108,8 +108,7 @@ If you install the cards through HACS, these URLs will be added automatically.
 - **Game notifications**: Optional notifications for game starts, goals, and series conclusions
 
 ## License
-- **TBD Image Setup**: Copy `www/nhl/tbd.png` to your Home Assistant `config/www/nhl/` folder. This image displays when playoff teams aren't determined yet.
-- 
+
 This project is licensed under the **MIT License**. See the terms below:
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
