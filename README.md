@@ -41,23 +41,23 @@ Home Assistant custom integration and Lovelace dashboard for NHL playoff trackin
 
 ## Screenshots
 
-### Dashboard View
+### Full Season View (2024)
 
-![NHL Playoffs Dashboard](images/dashboard-screenshot.png)
+![Full Season 2024](images/Full%20Season%202024.png)
 
-*The main dashboard showing the playoff bracket with team logos, seeds, and series status.*
+*Complete playoff bracket for the 2023-2024 NHL season showing all rounds and teams.*
 
-### Configuration Flow
+### Integration Setup
 
-![Config Flow Setup](images/config-flow.png)
+![Integration API](images/Intergration%20api.png)
 
-*Integration setup screen where you select the season mode and year.*
+*Home Assistant integration configuration screen for setting up the NHL Playoffs integration.*
 
-### Sensor Data
+### Partial Season View (2026)
 
-![Sensor Attributes](images/sensor-attributes.png)
+![Partial Season 2026](images/Partial%20Season%202026.png)
 
-*Example of the sensor data structure showing team information and series status.*
+*Dashboard view showing current playoff progress for the 2025-2026 season.*
 
 ## Required Lovelace resources
 
