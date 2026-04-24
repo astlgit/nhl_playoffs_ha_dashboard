@@ -4,16 +4,11 @@ Home Assistant custom integration and Lovelace dashboard for NHL playoff trackin
 
 ## What it contains
 
-- `custom_components/nhl_playoffs/`
-  - `manifest.json` — integration metadata for Home Assistant and HACS
-  - `config_flow.py` — UI setup flow for the integration
-  - `const.py` — domain, option keys, and default values
-  - `sensor.py` — sensor platform setup entrypoint
-  - `coordinator/` — data update coordinator logic
-  - `sensors/` — sensor entity definitions
-  - `translations/en.json` — integration translations and UI strings
-- `lovelace/nhl_playoffs_dashboard.yaml` — Lovelace dashboard configuration for the playoff view
-- `hacs.json` — HACS repository metadata for community distribution
+- `custom_components/nhl_playoffs/` — Home Assistant integration files
+- `lovelace/nhl_playoffs_dashboard.yaml` — Lovelace dashboard configuration
+- `www/nhl/` — Local images folder (contains README with TBD image instructions)
+- `images/` — Screenshots for documentation
+- `hacs.json` — HACS repository metadata
 
 ## Installation
 
@@ -88,13 +83,15 @@ If you install the cards through HACS, these URLs will be added automatically.
 
 - The custom component currently includes the basic integration structure and sensor platform wiring.
 - The dashboard requires these Lovelace custom cards:
+- **TBD Placeholder Image**: When teams aren't determined yet, the dashboard shows `/local/nhl/tbd.png`. You need to add this image file to your Home Assistant `config/www/nhl/tbd.png` folder.
   - `button-card`
   - `layout-card`
 - Add your NHL API and data-fetching logic inside `custom_components/nhl_playoffs/coordinator/` and `custom_components/nhl_playoffs/sensors/`.
 - Keep `manifest.json` and `hacs.json` updated with any dependency or metadata changes.
 
 ## License
-
+**TBD Image Setup**: Copy the `tbd.png` file from `www/nhl/` to your Home Assistant `config/www/nhl/` folder. This image displays when playoff teams aren't determined yet.
+- 
 This project is licensed under the **MIT License**. See the terms below:
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
