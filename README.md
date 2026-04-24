@@ -50,9 +50,19 @@ If you install the cards through HACS, these URLs will be added automatically.
 
 ## Usage
 
-- Integration domain: `nhl_playoffs`
-- The integration is configured through the Home Assistant UI using a config flow.
+### Configuration
+
+1. After installation, go to **Settings** > **Devices & Services** > **Integrations**.
+2. Click **Create Integration** and select **NHL Playoffs**.
+3. In the config flow, choose your season mode:
+   - **Current season (auto-detect)**: Fetches data for the current year automatically.
+   - **Manual season (override)**: Select a specific year to display past playoffs (e.g., `20232024` for the 2023-2024 season).
+4. Complete the setup.
+
+### Dashboard
+
 - The dashboard YAML is a starter page for the Stanley Cup playoffs bracket display.
+- It expects sensor entities named `sensor.playoffs_r1_west_*`, `sensor.playoffs_r2_west_*`, etc.
 
 ## Notes
 
@@ -65,4 +75,10 @@ If you install the cards through HACS, these URLs will be added automatically.
 
 ## License
 
-Add your preferred license here before sharing publicly.
+This project is licensed under the **MIT License**. See the terms below:
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
