@@ -99,7 +99,6 @@ If you install the cards through HACS, these URLs will be added automatically.
 - **Interactive button cards**: Make playoff round cards clickable to show current/future game details, live scores, and series statistics
 - **Dynamic logo updates**: Automatically change the Stanley Cup logo to match the selected season year (current or past)
 - **YAML optimization**: Refactor dashboard configuration to use reusable templates and reduce file size
-- **East Conference support**: Add Eastern Conference playoff bracket visualization
 - **Mobile optimization**: Improve responsive design for tablets and phones
 - **Enhanced sensor data**: Add game times, venues, player stats, and injury reports to sensor attributes
 - **Error handling**: Better fallback displays when API data is unavailable or incomplete
