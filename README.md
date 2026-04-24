@@ -54,6 +54,81 @@ Home Assistant custom integration and Lovelace dashboard for NHL playoff trackin
 
 *Dashboard view showing current playoff progress for the 2025-2026 season.*
 
+## Dashboard Installation
+
+### Prerequisites
+
+Before adding the dashboard, ensure you have:
+1. Installed the required Lovelace custom cards (`button-card` and `layout-card`)
+2. Set up the TBD placeholder image in `config/www/nhl/tbd.png`
+3. Configured the NHL Playoffs integration
+
+### Method 1: YAML Configuration (Legacy)
+
+If you're using YAML mode for Lovelace dashboards:
+
+1. **Enable YAML mode** in your `configuration.yaml`:
+   ```yaml
+   lovelace:
+     mode: yaml
+   ```
+
+2. **Create or edit your dashboard YAML file**. If you have a separate dashboard file (e.g., `ui-lovelace.yaml`), add the NHL playoffs dashboard:
+
+   ```yaml
+   title: NHL Playoffs Dashboard
+   views:
+     - title: Stanley Cup Playoffs
+       path: playoffs
+       cards:
+         # Copy the entire contents of lovelace/nhl_playoffs_dashboard.yaml here
+         # Remove the 'panel: true' line when pasting into a view
+   ```
+
+3. **Copy the dashboard content**:
+   - Open `lovelace/nhl_playoffs_dashboard.yaml` from this repository
+   - Copy everything under the `cards:` section
+   - Paste it into your dashboard YAML under the `cards:` key
+   - Remove the `panel: true` line since you're adding it to a view, not creating a panel
+
+4. **Restart Home Assistant** to apply the changes.
+
+### Method 2: UI Dashboard Editor (Recommended)
+
+For the modern UI dashboard approach:
+
+1. **Go to your Home Assistant dashboard** and click the three dots (⋮) in the top right.
+
+2. **Create a new dashboard**:
+   - Go to **Settings** > **Dashboards** > **Add Dashboard**
+   - Enter **"NHL Playoffs Dashboard"** as the dashboard title
+   - Select **"Show in sidebar"** if desired
+   - Click **"Create"**
+
+3. **Open the Raw Configuration Editor**:
+   - Once created, go back to the dashboard list
+   - Click the three dots (⋮) next to your new dashboard > **"Raw configuration editor"**
+
+4. **Add the dashboard configuration**:
+   - Copy the entire contents of `lovelace/nhl_playoffs_dashboard.yaml`
+   - Paste it into the raw editor
+   - The YAML includes the dashboard title and view configuration
+
+5. **Save and exit** the editor.
+
+**Alternative: Edit existing dashboard**
+- If you prefer to add the playoffs view to an existing dashboard:
+- Open the existing dashboard > three dots (⋮) > **"Raw configuration editor"**
+- Modify the YAML to add the playoffs view alongside existing views
+- Remove `panel: true` from the pasted YAML when adding to an existing dashboard
+
+### Tips
+
+- **Panel vs View**: The provided YAML uses `panel: true` for a full-screen experience. If adding to an existing dashboard, remove `panel: true` and paste under a `views:` entry.
+- **Custom Cards**: Ensure `button-card` and `layout-card` are installed before adding the dashboard.
+- **TBD Image**: The dashboard references `/local/nhl/tbd.png` for undetermined teams.
+- **Sensor Entities**: The dashboard expects sensors with names like `sensor.playoffs_r1_west_1`, etc.
+
 ## Required Lovelace resources
 
 If you are using the dashboard YAML directly, make sure the following resources are available in Home Assistant:
