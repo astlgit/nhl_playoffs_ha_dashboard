@@ -1,0 +1,7 @@
+{
+  "name": "NHL Playoffs Dashboard",
+  "content_in_root": false,
+  "domains": ["nhl_playoffs"],
+  "iot_class": "cloud_polling",
+  "render_readme_in_browser": true
+}

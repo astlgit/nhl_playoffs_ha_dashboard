@@ -1,0 +1,10 @@
+{
+  "domain": "nhl_playoffs",
+  "name": "NHL Playoffs Dashboard Integration",
+  "version": "1.0.0",
+  "documentation": "https://github.com/astlgit/nhl_playoffs_ha_dashboard",
+  "requirements": [],
+  "dependencies": [],
+  "codeowners": ["@astlgit"],
+  "iot_class": "cloud_polling"
+}
