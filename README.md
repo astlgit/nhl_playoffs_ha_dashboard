@@ -89,6 +89,25 @@ If you install the cards through HACS, these URLs will be added automatically.
 - Add your NHL API and data-fetching logic inside `custom_components/nhl_playoffs/coordinator/` and `custom_components/nhl_playoffs/sensors/`.
 - Keep `manifest.json` and `hacs.json` updated with any dependency or metadata changes.
 
+## Future Improvements (TODO)
+
+### Current Flaws
+- **Static year display**: Cup logo and year labels are hardcoded to show "2026" regardless of selected season
+- **Title responsiveness**: Dashboard title may not fit properly on screens smaller than 10 inches
+
+### Planned Features
+- **Interactive button cards**: Make playoff round cards clickable to show current/future game details, live scores, and series statistics
+- **Dynamic logo updates**: Automatically change the Stanley Cup logo to match the selected season year (current or past)
+- **YAML optimization**: Refactor dashboard configuration to use reusable templates and reduce file size
+- **East Conference support**: Add Eastern Conference playoff bracket visualization
+- **Mobile optimization**: Improve responsive design for tablets and phones
+- **Enhanced sensor data**: Add game times, venues, player stats, and injury reports to sensor attributes
+- **Error handling**: Better fallback displays when API data is unavailable or incomplete
+- **Localization**: Add multi-language support for international users
+- **Performance improvements**: Optimize data fetching and reduce dashboard load times
+- **Series progress indicators**: Add visual progress bars showing wins needed for advancement
+- **Game notifications**: Optional notifications for game starts, goals, and series conclusions
+
 ## License
 - **TBD Image Setup**: Copy `www/nhl/tbd.png` to your Home Assistant `config/www/nhl/` folder. This image displays when playoff teams aren't determined yet.
 - 
