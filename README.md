@@ -83,9 +83,9 @@ If you install the cards through HACS, these URLs will be added automatically.
 
 - The custom component currently includes the basic integration structure and sensor platform wiring.
 - The dashboard requires these Lovelace custom cards:
-- **TBD Placeholder Image**: When teams aren't determined yet, the dashboard shows `/local/nhl/tbd.png`. You need to add this image file to your Home Assistant `config/www/nhl/tbd.png` folder.
   - `button-card`
   - `layout-card`
+- **TBD Placeholder Image**: When teams aren't determined yet, the dashboard shows `/local/nhl/tbd.png`. You need to add this image file to your Home Assistant `config/www/nhl/tbd.png` folder.
 - Add your NHL API and data-fetching logic inside `custom_components/nhl_playoffs/coordinator/` and `custom_components/nhl_playoffs/sensors/`.
 - Keep `manifest.json` and `hacs.json` updated with any dependency or metadata changes.
 
