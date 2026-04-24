@@ -39,6 +39,26 @@ Home Assistant custom integration and Lovelace dashboard for NHL playoff trackin
 
 > `lovelace/nhl_playoffs_dashboard.yaml` includes the required resource references for these custom cards.
 
+## Screenshots
+
+### Dashboard View
+
+![NHL Playoffs Dashboard](images/dashboard-screenshot.png)
+
+*The main dashboard showing the playoff bracket with team logos, seeds, and series status.*
+
+### Configuration Flow
+
+![Config Flow Setup](images/config-flow.png)
+
+*Integration setup screen where you select the season mode and year.*
+
+### Sensor Data
+
+![Sensor Attributes](images/sensor-attributes.png)
+
+*Example of the sensor data structure showing team information and series status.*
+
 ## Required Lovelace resources
 
 If you are using the dashboard YAML directly, make sure the following resources are available in Home Assistant:
