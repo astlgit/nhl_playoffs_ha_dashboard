@@ -12,7 +12,10 @@
     "step": {
       "init": {
         "title": "NHL Playoffs Options",
-        "description": "Configure season selection for NHL Playoffs."
+        "description": "Configure debug logging for NHL Playoffs.",
+        "data": {
+          "debug_logging": "Enable debug logging"
+        }
       }
     }
   }

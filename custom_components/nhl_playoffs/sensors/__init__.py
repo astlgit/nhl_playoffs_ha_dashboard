@@ -1,1 +1,1 @@
-from .series_sensor import async_setup_entry
+# empty __init__ to make this a package
