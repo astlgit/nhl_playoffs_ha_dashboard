@@ -1,0 +1,19 @@
+{
+  "title": "NHL Playoffs",
+  "config": {
+    "step": {
+      "user": {
+        "title": "NHL Playoffs",
+        "description": "Set up the NHL Playoffs integration."
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "NHL Playoffs Options",
+        "description": "Configure season selection for NHL Playoffs."
+      }
+    }
+  }
+}
