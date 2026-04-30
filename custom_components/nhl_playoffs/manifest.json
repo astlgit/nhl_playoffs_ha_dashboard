@@ -1,7 +1,7 @@
 {
   "domain": "nhl_playoffs",
   "name": "NHL Playoffs Dashboard Integration",
-  "version": "2.0.0",
+  "version": "2.0.0-dev",
   "documentation": "https://github.com/astlgit/nhl_playoffs_ha_dashboard",
   "requirements": ["aiohttp>=3.9.0"],
   "dependencies": [],
