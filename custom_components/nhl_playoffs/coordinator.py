@@ -8,7 +8,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 from homeassistant.helpers import aiohttp_client
 
-from ..const import (
+from .const import (
     DOMAIN,
     LOGGER,
     UPDATE_INTERVAL,
@@ -19,9 +19,9 @@ from ..const import (
     SEASON_MODE_MANUAL,
 )
 
-from .season import get_current_season
-from .fetcher import fetch_bracket, fetch_carousel, fetch_schedule_for_series
-from ..utils.mapping import SERIES_MAP
+from .utils.season import get_current_season
+from .api.fetcher import fetch_bracket, fetch_carousel, fetch_schedule_for_series
+from .utils.mapping import SERIES_MAP
 
 
 class NHLPlayoffsCoordinator(DataUpdateCoordinator[dict[str, Any]]):
@@ -34,8 +34,14 @@ class NHLPlayoffsCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         data = entry.data
         options = entry.options
 
-        self.season_mode = options.get(CONF_SEASON_MODE, data.get(CONF_SEASON_MODE, SEASON_MODE_CURRENT))
-        self.manual_season = options.get(CONF_MANUAL_SEASON, data.get(CONF_MANUAL_SEASON, ""))
+        self.season_mode = options.get(
+            CONF_SEASON_MODE,
+            data.get(CONF_SEASON_MODE, SEASON_MODE_CURRENT),
+        )
+        self.manual_season = options.get(
+            CONF_MANUAL_SEASON,
+            data.get(CONF_MANUAL_SEASON, ""),
+        )
 
         super().__init__(
             hass,
@@ -79,7 +85,9 @@ class NHLPlayoffsCoordinator(DataUpdateCoordinator[dict[str, Any]]):
             schedules: dict[str, Any] = {}
 
             tasks = [
-                asyncio.create_task(fetch_schedule_for_series(session, season, letter))
+                asyncio.create_task(
+                    fetch_schedule_for_series(session, season, letter)
+                )
                 for letter in active_series_letters
             ]
 
@@ -126,7 +134,6 @@ class NHLPlayoffsCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         carousel: dict[str, Any],
         schedules: dict[str, Any],
     ) -> dict[str, Any]:
-
         data: dict[str, Any] = {}
 
         # Bracket

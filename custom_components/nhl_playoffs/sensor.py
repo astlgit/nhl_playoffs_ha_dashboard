@@ -4,7 +4,8 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .sensors.series_sensor import async_setup_entry as setup_series_sensors
+from .series_sensor import async_setup_entry as setup_series_sensors
+from .live_series_sensor import async_setup_entry as setup_live_sensors
 
 
 async def async_setup_entry(
@@ -12,5 +13,9 @@ async def async_setup_entry(
     entry: ConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
-    """Forward to organized sensors module."""
+    """Set up all NHL Playoffs sensors."""
+    # Existing bracket sensors
     await setup_series_sensors(hass, entry, async_add_entities)
+
+    # New live sensors
+    await setup_live_sensors(hass, entry, async_add_entities)

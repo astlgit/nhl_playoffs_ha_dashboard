@@ -4,7 +4,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 
 from .const import DOMAIN
-from .coordinator.coordinator import NHLPlayoffsCoordinator
+from .coordinator import NHLPlayoffsCoordinator   # ← updated import
 
 
 PLATFORMS: list[str] = ["sensor"]

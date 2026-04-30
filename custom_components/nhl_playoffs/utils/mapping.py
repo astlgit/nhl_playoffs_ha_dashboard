@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-# Map our 15 sensors to NHL series letters + metadata
-# You can tweak names to taste.
+from typing import Optional, Dict, Any
 
+# Your existing static mapping (unchanged)
 SERIES_MAP = {
     "r1_east_1": {
         "name": "Playoffs R1 East 1",
@@ -95,3 +95,35 @@ SERIES_MAP = {
         "conference": "League",
     },
 }
+
+
+# ---------------------------------------------------------
+# NEW: Reverse lookup helpers for LIVE GAME mapping
+# ---------------------------------------------------------
+
+# Build reverse lookup: "A" → "r1_east_1"
+LETTER_TO_SERIES_KEY = {
+    meta["series_letter"]: key for key, meta in SERIES_MAP.items()
+}
+
+
+def get_series_key_from_letter(letter: str) -> Optional[str]:
+    """Return our internal series key (e.g., r1_east_1) from a series letter (A–O)."""
+    if not letter:
+        return None
+    return LETTER_TO_SERIES_KEY.get(letter.upper())
+
+
+def get_series_key_from_live_game(game: Dict[str, Any]) -> Optional[str]:
+    """
+    Extract the series letter from a live game object and map it to our internal key.
+    StatsAPI path:
+        game["seriesSummary"]["seriesCode"]  → "A", "B", ..., "O"
+    """
+    summary = game.get("seriesSummary", {})
+    letter = summary.get("seriesCode")
+
+    if not letter:
+        return None
+
+    return get_series_key_from_letter(letter)
