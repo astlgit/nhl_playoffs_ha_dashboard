@@ -8,9 +8,9 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from ..const import DOMAIN
-from ..coordinator.coordinator import NHLPlayoffsCoordinator
-from ..utils.mapping import SERIES_MAP
+from ..const import DOMAIN, SERIES_COORDINATOR
+from ..series_coordinator import SeriesCoordinator
+from ..utils.mapping_bracket import SERIES_MAP
 
 
 async def async_setup_entry(
@@ -18,13 +18,14 @@ async def async_setup_entry(
     entry: ConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
-    coordinator: NHLPlayoffsCoordinator = hass.data[DOMAIN][entry.entry_id]
-    entities: list[NHLPlayoffSeriesSensor] = []
+    series_coordinator: SeriesCoordinator = hass.data[DOMAIN][entry.entry_id][SERIES_COORDINATOR]
+
+    entities: list[SeriesSensor] = []
 
     for key, meta in SERIES_MAP.items():
         entities.append(
-            NHLPlayoffSeriesSensor(
-                coordinator=coordinator,
+            SeriesSensor(
+                coordinator=series_coordinator,
                 series_key=key,
                 meta=meta,
             )
@@ -33,15 +34,20 @@ async def async_setup_entry(
     async_add_entities(entities)
 
 
-class NHLPlayoffSeriesSensor(CoordinatorEntity, SensorEntity):
+class SeriesSensor(CoordinatorEntity, SensorEntity):
+    """Playoff series sensor using the new SeriesCoordinator."""
+
     _attr_icon = "mdi:hockey-sticks"
 
-    def __init__(self, coordinator: NHLPlayoffsCoordinator, series_key: str, meta: dict[str, Any]) -> None:
+    def __init__(self, coordinator: SeriesCoordinator, series_key: str, meta: dict[str, Any]) -> None:
         super().__init__(coordinator)
+
         self._series_key = series_key
         self._meta = meta
-        self._attr_unique_id = f"{DOMAIN}_{series_key}"
-        self._attr_entity_id = f"playoffs_{series_key}"
+
+        # REQUIRED: match your working naming pattern
+        self._attr_unique_id = f"{DOMAIN}_series_{series_key}"
+        self.entity_id = f"sensor.series_{series_key}"
         self._attr_name = meta["name"]
 
     @property
@@ -51,67 +57,47 @@ class NHLPlayoffSeriesSensor(CoordinatorEntity, SensorEntity):
         series_data = data.get(letter, {})
 
         bracket = series_data.get("bracket", {})
-        schedule = series_data.get("schedule", {})
+        details = series_data.get("series_details", {})
+        next_game = series_data.get("next_game")
+        today_game_pk = series_data.get("today_game_pk")
 
         attrs: dict[str, Any] = {}
 
         # ---------------------------------------------------------
-        # TEAM + SERIES DATA (with safe fallbacks)
+        # TEAM + SERIES DATA
         # ---------------------------------------------------------
         team1 = bracket.get("topSeedTeam") or {}
         team2 = bracket.get("bottomSeedTeam") or {}
 
-        t1_abbrev = team1.get("abbrev") or "TBD"
-        t2_abbrev = team2.get("abbrev") or "TBD"
+        attrs["team1_abbrev"] = team1.get("abbrev") or "TBD"
+        attrs["team2_abbrev"] = team2.get("abbrev") or "TBD"
 
-        t1_name = (team1.get("name") or {}).get("default") or "TBD"
-        t2_name = (team2.get("name") or {}).get("default") or "TBD"
+        attrs["team1_name"] = (team1.get("name") or {}).get("default") or "TBD"
+        attrs["team2_name"] = (team2.get("name") or {}).get("default") or "TBD"
 
-        t1_seed = bracket.get("topSeedRankAbbrev") or "—"
-        t2_seed = bracket.get("bottomSeedRankAbbrev") or "—"
+        attrs["team1_seed"] = bracket.get("topSeedRankAbbrev") or "—"
+        attrs["team2_seed"] = bracket.get("bottomSeedRankAbbrev") or "—"
 
-        t1_wins = bracket.get("topSeedWins") or 0
-        t2_wins = bracket.get("bottomSeedWins") or 0
+        attrs["team1_wins"] = bracket.get("topSeedWins") or 0
+        attrs["team2_wins"] = bracket.get("bottomSeedWins") or 0
 
-        t1_logo = team1.get("logo") or "/local/nhl/tbd.png"
-        t2_logo = team2.get("logo") or "/local/nhl/tbd.png"
-
-        attrs["team1_abbrev"] = t1_abbrev
-        attrs["team2_abbrev"] = t2_abbrev
-        attrs["team1_name"] = t1_name
-        attrs["team2_name"] = t2_name
-        attrs["team1_seed"] = t1_seed
-        attrs["team2_seed"] = t2_seed
-        attrs["team1_wins"] = t1_wins
-        attrs["team2_wins"] = t2_wins
-        attrs["team1_logo"] = t1_logo
-        attrs["team2_logo"] = t2_logo
+        attrs["team1_logo"] = team1.get("logo") or "/local/nhl/tbd.png"
+        attrs["team2_logo"] = team2.get("logo") or "/local/nhl/tbd.png"
 
         attrs["series_letter"] = letter
         attrs["round"] = self._meta["round"]
         attrs["conference"] = self._meta["conference"]
 
         # ---------------------------------------------------------
-        # SERIES STATUS (TBD-safe, final logic)
+        # SERIES STATUS
         # ---------------------------------------------------------
-        a1 = t1_abbrev
-        a2 = t2_abbrev
-        w1 = t1_wins
-        w2 = t2_wins
+        a1 = attrs["team1_abbrev"]
+        a2 = attrs["team2_abbrev"]
+        w1 = attrs["team1_wins"]
+        w2 = attrs["team2_wins"]
 
-        # Both teams unknown
-        if a1 == "TBD" and a2 == "TBD":
+        if a1 == "TBD" or a2 == "TBD" or (w1 == 0 and w2 == 0):
             attrs["series_status"] = "TBD"
-
-        # One team unknown
-        elif a1 == "TBD" or a2 == "TBD":
-            attrs["series_status"] = "TBD"
-
-        # Before series starts
-        elif w1 == 0 and w2 == 0:
-            attrs["series_status"] = "TBD"
-
-        # Series active
         elif w1 < 4 and w2 < 4:
             if w1 > w2:
                 attrs["series_status"] = f"{a1} lead {w1}-{w2}"
@@ -119,8 +105,6 @@ class NHLPlayoffSeriesSensor(CoordinatorEntity, SensorEntity):
                 attrs["series_status"] = f"{a2} lead {w2}-{w1}"
             else:
                 attrs["series_status"] = f"Tied {w1}-{w2}"
-
-        # Series finished
         else:
             if w1 > w2:
                 attrs["series_status"] = f"{a1} wins {w1}-{w2}"
@@ -128,26 +112,22 @@ class NHLPlayoffSeriesSensor(CoordinatorEntity, SensorEntity):
                 attrs["series_status"] = f"{a2} wins {w2}-{w1}"
 
         # ---------------------------------------------------------
-        # SCHEDULE PARSING
+        # GAMES LIST (from series_details)
         # ---------------------------------------------------------
-        games = (
-            schedule.get("games")
-            or schedule.get("gameSchedule")
-            or []
-        )
+        games = details.get("games", []) or []
 
         games_list: list[dict[str, Any]] = []
         games_dict: dict[str, Any] = {}
 
         for g in games:
-            game_id = g.get("id") or g.get("gameId")
+            game_id = g.get("id")
             if not game_id:
                 continue
 
             item = {
                 "game_id": game_id,
-                "game_state": g.get("gameState") or g.get("gameStateCode"),
-                "start_time": g.get("startTimeUTC") or g.get("startTime"),
+                "game_state": g.get("gameState"),
+                "start_time": g.get("startTimeUTC"),
                 "home": (g.get("homeTeam") or {}).get("abbrev"),
                 "away": (g.get("awayTeam") or {}).get("abbrev"),
                 "home_score": (g.get("homeTeam") or {}).get("score"),
@@ -162,22 +142,25 @@ class NHLPlayoffSeriesSensor(CoordinatorEntity, SensorEntity):
         attrs["games_dict"] = games_dict
 
         # ---------------------------------------------------------
-        # NEXT GAME / LAST GAME
+        # NEXT GAME
         # ---------------------------------------------------------
-        next_game = None
-        last_game = None
+        if next_game:
+            attrs["next_game_pk"] = next_game.get("game_pk")
+            attrs["next_game_time"] = next_game.get("start_time")
+            attrs["next_game_home"] = next_game.get("home")
+            attrs["next_game_away"] = next_game.get("away")
+            attrs["next_game_number"] = next_game.get("game_number")
+        else:
+            attrs["next_game_pk"] = None
+            attrs["next_game_time"] = None
+            attrs["next_game_home"] = None
+            attrs["next_game_away"] = None
+            attrs["next_game_number"] = None
 
-        for g in games_list:
-            state = (g.get("game_state") or "").upper()
-
-            if state in ("FUT", "PRE") and next_game is None:
-                next_game = g
-
-            if state in ("OFF", "FINAL", "END", "COMPLETED"):
-                last_game = g
-
-        attrs["next_game"] = next_game
-        attrs["last_game"] = last_game
+        # ---------------------------------------------------------
+        # TODAY GAME PK (critical for LiveCoordinator)
+        # ---------------------------------------------------------
+        attrs["today_game_pk"] = today_game_pk
 
         return attrs
 

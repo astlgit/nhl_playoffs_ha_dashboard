@@ -35,3 +35,14 @@ async def fetch_schedule_for_series(
     except Exception as err:
         LOGGER.debug("Schedule fetch failed for series %s: %s", series_letter, err)
         return {}
+
+async def fetch_series_details(
+    session: aiohttp.ClientSession, season: str, series_letter: str
+) -> dict:
+    """Fetch full series details including games[] list."""
+    url = f"https://api-web.nhle.com/v1/schedule/playoff-series/{season}/{series_letter.lower()}"
+    try:
+        return await fetch_json(session, url)
+    except Exception as err:
+        LOGGER.debug("Series details fetch failed for %s: %s", series_letter, err)
+        return {}
