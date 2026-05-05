@@ -24,6 +24,8 @@ Home Assistant custom integration and Lovelace dashboard for NHL playoff trackin
 
 ### HACS install
 
+[![Open your Home Assistant instance and add this repository to HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=astlgit&repository=nhl_playoffs_ha_dashboard)
+
 1. In HACS, go to `Integrations` > `Custom repositories`.
 2. Add this repository as a custom integration repository.
 3. Install the `NHL Playoffs Dashboard` integration from HACS.
