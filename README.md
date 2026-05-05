@@ -32,6 +32,9 @@ Home Assistant custom integration and Lovelace dashboard for NHL playoff trackin
    - `layout-card`
 5. Restart Home Assistant after installation.
 
+[![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=astlgit&repository=nhl_playoffs_ha_dashboard)
+
+
 > `lovelace/nhl_playoffs_dashboard.yaml` includes the required resource references for these custom cards.
 
 ## Screenshots
