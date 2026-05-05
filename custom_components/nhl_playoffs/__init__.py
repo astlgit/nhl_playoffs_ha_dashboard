@@ -7,6 +7,7 @@ from .const import (
     DOMAIN,
     SERIES_COORDINATOR,
     LIVE_COORDINATOR,
+    LOGGER,
 )
 from .series_coordinator import SeriesCoordinator
 from .live_coordinator import LiveCoordinator
@@ -19,13 +20,19 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     live_coordinator = LiveCoordinator(hass, entry)
 
-    # Initial sync
+    # Initial sync FIRST — ensures game_pk is populated correctly
+    #LOGGER.warning("🟠 INIT: SERIES DATA BEFORE FIRST SYNC: %s", series_coordinator.data)
+
     live_coordinator.update_from_series(series_coordinator.data)
 
-    # Auto-refresh wiring
+    # Attach listener AFTER initial sync — prevents overwriting with None
     live_coordinator.attach_series_coordinator(series_coordinator)
 
-    await live_coordinator.async_start()
+    # Start polling AFTER HA is fully started
+    async def _start_later(_):
+        await live_coordinator.async_start()
+
+    hass.bus.async_listen_once("homeassistant_started", _start_later)
 
     hass.data.setdefault(DOMAIN, {})
     hass.data[DOMAIN][entry.entry_id] = {

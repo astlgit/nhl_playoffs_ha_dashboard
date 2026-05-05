@@ -1,33 +1,22 @@
 from __future__ import annotations
 from typing import Any, Dict
-
+from ..const import LOGGER
 
 def _compute_period_ordinal(period: int | None) -> str:
-    """Convert period number into ordinal (1st, 2nd, OT, 2OT, etc.)."""
-    if period is None or period == 0:
+    if not period:
         return ""
-
     if period == 1:
         return "1st"
     if period == 2:
         return "2nd"
     if period == 3:
         return "3rd"
-
-    # Overtime logic
-    ot_number = period - 3
-    if ot_number == 1:
-        return "OT"
-    return f"{ot_number}OT"
+    ot = period - 3
+    return "OT" if ot == 1 else f"{ot}OT"
 
 
-def parse_live_game(live: Dict[str, Any]) -> Dict[str, Any]:
-    """
-    Parse the normalized live game object returned by live_api.fetch_live_game().
-    Attribute names remain identical to the old system for dashboard compatibility.
-    """
-
-    if not live:
+def parse_live_game(raw: Dict[str, Any]) -> Dict[str, Any]:
+    if not raw:
         return {
             "game_pk": None,
             "game_state": "",
@@ -48,74 +37,77 @@ def parse_live_game(live: Dict[str, Any]) -> Dict[str, Any]:
             "series_status": None,
         }
 
-    # Basic fields
-    game_state = live.get("game_state", "")
-
-    # Treat CRIT as LIVE
+    game_state = (raw.get("gameState") or "").upper()
     if game_state == "CRIT":
         game_state = "LIVE"
 
-    current_period = live.get("current_period")
-    current_period_ordinal = (
-        live.get("current_period_ordinal")
-        or _compute_period_ordinal(current_period)
-    )
+    home = raw.get("homeTeam", {})
+    away = raw.get("awayTeam", {})
 
-    time_remaining = live.get("time_remaining")
-    is_intermission = live.get("is_intermission", False)
+    home_team = home.get("abbrev") or ""
+    away_team = away.get("abbrev") or ""
 
-    # Teams
-    home_team = live.get("home_team", "")
-    away_team = live.get("away_team", "")
+    home_score = home.get("score", 0)
+    away_score = away.get("score", 0)
 
-    # Scores
-    home_score = live.get("home_score", 0)
-    away_score = live.get("away_score", 0)
+    home_logo = home.get("logo")
+    away_logo = away.get("logo")
 
-    # Logos
-    home_logo = live.get("home_logo")
-    away_logo = live.get("away_logo")
+    home_shots = home.get("sog")
+    away_shots = away.get("sog")
 
-    # Shots
-    home_shots = live.get("home_shots")
-    away_shots = live.get("away_shots")
+    clock = raw.get("clock", {})
+    time_remaining = clock.get("timeRemaining", "")
+    is_intermission = clock.get("inIntermission", False)
 
-    # Winner (only when final)
+    period = raw.get("displayPeriod") or raw.get("periodDescriptor", {}).get("number")
+    period_ordinal = _compute_period_ordinal(period)
+
     winner = None
     if game_state in ("FINAL", "OFF"):
         if home_score > away_score:
             winner = home_team
         elif away_score > home_score:
             winner = away_team
+        
+    """LOGGER.warning("PARSED LIVE GAME OUTPUT: %s", {
+    "game_pk": raw.get("id"),
+    "game_state": game_state,
+    "home_team": home_team,
+    "away_team": away_team,
+    "home_score": home_score,
+    "away_score": away_score,
+    "current_period": period,
+    "current_period_ordinal": period_ordinal,
+    "period_time_remaining": time_remaining,
+    "is_intermission": is_intermission,
+    "home_logo": home_logo,
+    "away_logo": away_logo,
+    "home_shots": home_shots,
+    "away_shots": away_shots,
+    "winner": winner,
+    "series_code": raw.get("series_code"),
+    "series_status": raw.get("series_status"),
+    })"""
 
-    # Series metadata (optional)
-    series_code = live.get("series_code")
-    series_status = live.get("series_status")
 
     return {
-        "game_pk": live.get("game_pk"),
+        "game_pk": raw.get("id"),  # LiveCoordinator will overwrite this
         "game_state": game_state,
-
         "home_team": home_team,
         "away_team": away_team,
-
         "home_score": home_score,
         "away_score": away_score,
-
-        "current_period": current_period,
-        "current_period_ordinal": current_period_ordinal,
-
-        "period_time_remaining": time_remaining or "",
+        "current_period": period,
+        "current_period_ordinal": period_ordinal,
+        "period_time_remaining": time_remaining,
         "is_intermission": is_intermission,
-
         "home_logo": home_logo,
         "away_logo": away_logo,
-
         "home_shots": home_shots,
         "away_shots": away_shots,
-
-        "series_code": series_code,
-        "series_status": series_status,
-
         "winner": winner,
+        "series_code": raw.get("series_code"),
+        "series_status": raw.get("series_status"),
     }
+

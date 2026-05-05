@@ -22,8 +22,12 @@ async def async_setup_entry(
 
     entities = []
 
+    # Create sensors for each series
     for series_key, meta in SERIES_MAP.items():
+        # Static series info (today/next game)
         entities.append(SeriesSensor(series_coordinator, series_key, meta))
+
+        # Live game sensor (event-driven)
         entities.append(LiveSeriesSensor(hass, entry, series_key, meta))
 
     async_add_entities(entities)

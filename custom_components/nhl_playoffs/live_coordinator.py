@@ -6,7 +6,6 @@ from datetime import datetime
 
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.helpers.event import async_call_later
 from homeassistant.helpers import aiohttp_client
 
 from .const import (
@@ -15,69 +14,100 @@ from .const import (
     SERIES_LETTERS,
 )
 from .api.live_api import fetch_live_game
+from .utils.mapping_bracket import SERIES_MAP
 
-
+# INTERVALS
+LIVE_INTERVAL = 5          # LIVE + CRIT
+PRE_INTERVAL = 30          # PRE (and FUT < 30 min)
+FUT_LT3H_INTERVAL = 300    # FUT < 3 hours
+FUT_GT3H_INTERVAL = 3600   # FUT > 3 hours
+OFF_INTERVAL = 3600        # OFF / FINAL
 FINAL_COOLDOWN_SECONDS = 120
-LIVE_INTERVAL = 10
-PRE_1H_INTERVAL = 60
-PRE_1_3H_INTERVAL = 600
-PRE_3H_INTERVAL = 1800
-FUT_INTERVAL = 3600
-OFF_INTERVAL = 3600
 
 
 class LiveCoordinator:
-    """Independent per-series live polling with persistence."""
+    """Independent per-series live polling with correct legacy-format parsing."""
 
     def __init__(self, hass: HomeAssistant, entry: ConfigEntry) -> None:
         self.hass = hass
         self.entry = entry
 
-        self.state = entry.options.get("live_state", {})
+        # Load persisted state, but DO NOT trust game_pk/json/state
+        persisted = entry.options.get("live_state", {})
 
+        self.state = {}
         for letter in SERIES_LETTERS:
-            self.state.setdefault(letter, {
-                "game_pk": None,
-                "state": None,
-                "json": None,
-                "interval": FUT_INTERVAL,
-                "cooldown": 0,
-            })
+            prev = persisted.get(letter, {})
+            self.state[letter] = {
+                "game_pk": None,                     # always reset
+                "json": None,                        # always reset
+                "state": None,                       # always reset
+                "interval": prev.get("interval", FUT_GT3H_INTERVAL),
+                "cooldown": prev.get("cooldown", 0),
+            }
 
         self.tasks: dict[str, asyncio.Task] = {}
+        self._listeners: list[callable] = []
 
     # -------------------------------------------------------------------------
-    # NEW: Receive updates from SeriesCoordinator
+    # Listener registration
     # -------------------------------------------------------------------------
-    def update_from_series(self, series_data: dict[str, Any]) -> None:
-        for letter, data in series_data.items():
-            today_pk = data.get("today_game_pk")
-            next_game = data.get("next_game")
+    def add_listener(self, callback):
+        self._listeners.append(callback)
 
-            if today_pk:
-                self.state[letter]["game_pk"] = today_pk
-                self.state[letter]["cooldown"] = 0
-                continue
+    def _notify_listeners(self):
+        for callback in list(self._listeners):
+            try:
+                callback()
+            except Exception as err:
+                LOGGER.error("LiveCoordinator listener failed: %s", err)
 
-            if next_game:
-                self.state[letter]["game_pk"] = next_game.get("game_pk")
-                self.state[letter]["cooldown"] = 0
-                continue
 
-            self.state[letter]["game_pk"] = None
-            self.state[letter]["json"] = None
-            self.state[letter]["state"] = None
-
-        self._persist()
-
-    # -------------------------------------------------------------------------
-    # Auto-refresh when SeriesCoordinator updates
-    # -------------------------------------------------------------------------
     @callback
     def attach_series_coordinator(self, series_coordinator):
         series_coordinator.async_add_listener(
             lambda: self.update_from_series(series_coordinator.data)
         )
+
+    @callback
+    def update_from_series(self, series_data: dict[str, Any]) -> None:
+        """Receive game_pk from the Series API and store it for live polling."""
+        for letter, data in series_data.items():
+            today = data.get("today_game")
+            next_game = data.get("next_game")
+
+            # TODAY'S GAME TAKES PRIORITY
+            if today:
+                self.state[letter]["game_pk"] = today["game_pk"]
+                self.state[letter]["json"] = None
+
+                LOGGER.warning(
+                    "SERIES→LIVE HANDOFF %s: TODAY game_pk=%s",
+                    letter,
+                    today["game_pk"],
+                )
+                continue
+
+            # NEXT GAME (future)
+            if next_game:
+                self.state[letter]["game_pk"] = next_game["game_pk"]
+                self.state[letter]["json"] = None
+
+                LOGGER.warning(
+                    "SERIES→LIVE HANDOFF %s: NEXT game_pk=%s",
+                    letter,
+                    next_game["game_pk"],
+                )
+                continue
+
+            # NO GAME
+            self.state[letter]["game_pk"] = None
+            self.state[letter]["json"] = None
+
+            LOGGER.warning(
+                "SERIES→LIVE HANDOFF %s: NO GAME (game_pk=None)",
+                letter,
+            )
 
     # -------------------------------------------------------------------------
     # Public API
@@ -96,12 +126,15 @@ class LiveCoordinator:
         while True:
             try:
                 await self._update_series(letter, session)
+                #LOGGER.warning("UPDATE_SERIES %s game_pk=%s", letter, self.state[letter]["game_pk"])
             except Exception as err:
                 LOGGER.error("LiveCoordinator error for %s: %s", letter, err)
 
-            interval = self.state[letter]["interval"]
-            await asyncio.sleep(interval)
+            await asyncio.sleep(self.state[letter]["interval"])
 
+    # -------------------------------------------------------------------------
+    # Main update logic
+    # -------------------------------------------------------------------------
     async def _update_series(self, letter: str, session) -> None:
         series_state = self.state[letter]
         game_pk = series_state["game_pk"]
@@ -109,73 +142,105 @@ class LiveCoordinator:
         if not game_pk:
             series_state["json"] = None
             series_state["state"] = None
-            series_state["interval"] = FUT_INTERVAL
+            series_state["interval"] = FUT_GT3H_INTERVAL
+
+            LOGGER.warning(
+                "LIVE POLL %s: NO game_pk → idle interval=%s",
+                letter,
+                series_state["interval"],
+            )
+
             self._persist()
+            self._notify_listeners()
             return
 
-        live_json = await fetch_live_game(session, game_pk)
+        parsed = await fetch_live_game(session, game_pk)
+        if not parsed:
+            series_state["interval"] = FUT_GT3H_INTERVAL
 
-        if not live_json:
-            series_state["interval"] = FUT_INTERVAL
+            LOGGER.warning(
+                "LIVE POLL %s: fetch failed for game_pk=%s → interval=%s",
+                letter,
+                game_pk,
+                series_state["interval"],
+            )
+
             self._persist()
+            self._notify_listeners()
             return
 
-        # CRITICAL FIX: inject game_pk into the live JSON
-        live_json["game_pk"] = game_pk
+        game_state = parsed.get("game_state", "").upper()
 
-        game_state = (live_json.get("gameState") or "").upper()
-
-        # Reset JSON if game_pk changed
-        if series_state["json"] and series_state["json"].get("id") != game_pk:
-            series_state["json"] = None
-            series_state["state"] = None
-            series_state["cooldown"] = 0
-
-        # Store updated JSON
-        series_state["json"] = live_json
+        series_state["json"] = parsed
         series_state["state"] = game_state
-        series_state["interval"] = self._compute_interval(letter, live_json)
 
-        # Final cooldown logic
-        if game_state == "FINAL":
-            if series_state["cooldown"] < FINAL_COOLDOWN_SECONDS:
-                series_state["cooldown"] += series_state["interval"]
-                series_state["interval"] = LIVE_INTERVAL
-            else:
-                series_state["interval"] = FUT_INTERVAL
+        # Compute interval
+        series_state["interval"] = self._compute_interval(parsed)
+
+        LOGGER.warning(
+            "LIVE POLL %s: game_pk=%s state=%s interval=%s",
+            letter,
+            game_pk,
+            game_state,
+            series_state["interval"],
+        )
 
         self._persist()
+        self._notify_listeners()
 
-    def _compute_interval(self, letter: str, live_json: dict[str, Any]) -> int:
-        game_state = (live_json.get("gameState") or "").upper()
 
-        if game_state in ("LIVE", "CRIT"):
-            return LIVE_INTERVAL
 
-        if game_state == "PRE":
-            start_str = live_json.get("startTimeUTC")
-            if start_str:
-                try:
-                    start_dt = datetime.fromisoformat(start_str.replace("Z", "+00:00"))
-                    now = datetime.utcnow()
-                    diff = (start_dt - now).total_seconds()
+    # -------------------------------------------------------------------------
+    # Interval logic (legacy-format aware)
+    # -------------------------------------------------------------------------
+    def _compute_interval(self, live_json: dict[str, Any]) -> int:
+        # Prefer parsed normalized state
+        state = (
+            live_json.get("game_state")  # your normalized field
+            or live_json.get("gameState")  # raw NHL field
+            or ""
+        ).upper()
 
-                    if diff < 3600:
-                        return PRE_1H_INTERVAL
-                    if diff < 10800:
-                        return PRE_1_3H_INTERVAL
-                    return PRE_3H_INTERVAL
-                except Exception:
-                    return PRE_3H_INTERVAL
+        start_str = live_json.get("startTimeUTC")
 
-        if game_state == "FUT":
-            return FUT_INTERVAL
+        # LIVE / CRIT
+        if state in ("LIVE", "CRIT"):
+            return LIVE_INTERVAL  # 5 seconds
 
-        if game_state == "OFF":
+        # PRE
+        if state == "PRE":
+            return PRE_INTERVAL  # 30 seconds
+
+        # FUT (time-based)
+        if state == "FUT" and start_str:
+            try:
+                start_dt = datetime.fromisoformat(start_str.replace("Z", "+00:00"))
+                now = datetime.utcnow()
+                diff = (start_dt - now).total_seconds()
+
+                if diff > 3 * 3600:       # > 3 hours
+                    return FUT_GT3H_INTERVAL  # 3600
+                if diff > 60 * 60:        # 1–3 hours
+                    return FUT_LT3H_INTERVAL  # 300
+                return PRE_INTERVAL       # < 60 minutes → 30 seconds
+
+            except Exception:
+                return FUT_GT3H_INTERVAL
+
+        # FINAL → 120 seconds
+        if state == "FINAL":
+            return FINAL_COOLDOWN_SECONDS
+
+        # OFF → 3600 seconds
+        if state == "OFF":
             return OFF_INTERVAL
 
-        return FUT_INTERVAL
+        # Default
+        return FUT_GT3H_INTERVAL
 
+    # -------------------------------------------------------------------------
+    # Persistence
+    # -------------------------------------------------------------------------
     def _persist(self) -> None:
         new_options = dict(self.entry.options)
         new_options["live_state"] = self.state

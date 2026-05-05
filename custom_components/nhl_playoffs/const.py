@@ -48,7 +48,7 @@ SERIES_LETTERS = [
 # ---------------------------------------------------------------------------
 API_BRACKET = "https://api-web.nhle.com/v1/playoff-bracket/{year}"
 API_CAROUSEL = "https://api-web.nhle.com/v1/playoff-series/carousel/{season}"
-API_SCHEDULE = "https://api-web.nhle.com/v1/playoff-series/{season}/{series_letter}"
+API_SCHEDULE = "https://api-web.nhle.com/v1/schedule/playoff-series/{season}/{series_letter}"
 
 # League-wide authoritative schedule for today's games
 API_SCHEDULE_NOW = "https://api-web.nhle.com/v1/schedule/now"

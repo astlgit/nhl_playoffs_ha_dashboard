@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from datetime import timedelta
 from typing import Any, Dict
 
 from homeassistant.components.sensor import SensorEntity
@@ -9,16 +8,10 @@ from ..const import DOMAIN, LOGGER, SERIES_COORDINATOR, LIVE_COORDINATOR
 from ..utils.parsing_live import parse_live_game
 
 
-SCAN_INTERVAL_NORMAL = timedelta(seconds=60)
-SCAN_INTERVAL_LIVE = timedelta(seconds=10)
-SCAN_INTERVAL_FINAL = timedelta(seconds=300)
-SCAN_INTERVAL_SERIES_OVER = timedelta(hours=1)
-
-
 class LiveSeriesSensor(SensorEntity):
-    """Unified live sensor for a single playoff series."""
+    """Live game sensor driven entirely by LiveCoordinator timing."""
 
-    _attr_should_poll = True
+    _attr_should_poll = False
 
     def __init__(self, hass, entry, series_key: str, meta: dict[str, Any]) -> None:
         self.hass = hass
@@ -35,33 +28,44 @@ class LiveSeriesSensor(SensorEntity):
         self.series_coordinator = data[SERIES_COORDINATOR]
         self.live_coordinator = data[LIVE_COORDINATOR]
 
-        self._attr_extra_state_attributes = {}
         self._state = "normal"
-        self._scan_interval = SCAN_INTERVAL_NORMAL
+        self._attr_extra_state_attributes = {}
 
-    @property
-    def native_value(self) -> str:
-        return self._state
+    async def async_added_to_hass(self):
+        """Register for coordinator updates."""
+        #LOGGER.warning("LiveSeriesSensor registered listener for %s", self.series_key)
 
-    @property
-    def extra_state_attributes(self) -> Dict[str, Any]:
-        return self._attr_extra_state_attributes
+        # LiveCoordinator updates
+        self.live_coordinator.add_listener(
+            lambda: self.hass.async_create_task(self._handle_coordinator_update())
+        )
 
-    @property
-    def should_poll(self) -> bool:
-        return True
+        # SeriesCoordinator updates (today/next game)
+        self.series_coordinator.async_add_listener(
+            lambda: self.hass.async_create_task(self._handle_coordinator_update())
+        )
 
-    @property
-    def scan_interval(self) -> timedelta:
-        return self._scan_interval
+        # Initial state
+        await self._handle_coordinator_update()
 
-    async def async_update(self) -> None:
-        """Update using LiveCoordinator + SeriesCoordinator with clean parsing."""
+    async def _handle_coordinator_update(self):
+        """Refresh state from coordinators."""
+        #LOGGER.warning("LiveSeriesSensor UPDATE fired for %s", self.series_key)
+        #LOGGER.warning("🔴 SENSOR UPDATE: series_key=%s series_letter=%s", self.series_key, self.series_letter)
+        #LOGGER.warning("🔍 SENSOR %s USING LETTER=%s", self.series_key, self.series_letter)
+
         try:
             live_state = self.live_coordinator.get_series(self.series_letter)
-            raw_json = live_state.get("json")
 
-            # Always include game_pk
+            # If coordinator hasn't populated JSON yet
+            if not live_state or live_state.get("json") is None:
+                self._attr_extra_state_attributes = {
+                    "game_pk": live_state.get("game_pk")
+                }
+                return
+
+            raw_json = live_state["json"]
+
             self._attr_extra_state_attributes = {
                 "game_pk": live_state.get("game_pk")
             }
@@ -70,27 +74,23 @@ class LiveSeriesSensor(SensorEntity):
             # LIVE GAME
             # ---------------------------------------------------------
             if raw_json:
-                parsed = parse_live_game(raw_json)
+                parsed = raw_json  # already parsed by coordinator
                 self._attr_extra_state_attributes.update(parsed)
 
-                game_state = parsed["game_state"]
+                game_state = parsed.get("game_state", "")
 
-                if game_state == "LIVE":  # CRIT already normalized in parser
+                if game_state in ("LIVE", "CRIT", "PRE"):
                     self._state = "live"
-                    self._scan_interval = SCAN_INTERVAL_LIVE
-
-                elif game_state == "FINAL":
+                elif game_state in ("FINAL", "OFF"):
                     self._state = "final"
-                    self._scan_interval = SCAN_INTERVAL_FINAL
-
                 else:
                     self._state = "normal"
-                    self._scan_interval = SCAN_INTERVAL_NORMAL
 
+                self.async_write_ha_state()
                 return
 
             # ---------------------------------------------------------
-            # TODAY'S GAME (not live yet)
+            # TODAY'S GAME
             # ---------------------------------------------------------
             series_data = self.series_coordinator.data.get(self.series_letter, {})
             today = series_data.get("today_game")
@@ -99,7 +99,7 @@ class LiveSeriesSensor(SensorEntity):
             if today:
                 self._state = today.get("game_state", "normal")
                 self._attr_extra_state_attributes.update(today)
-                self._scan_interval = SCAN_INTERVAL_NORMAL
+                self.async_write_ha_state()
                 return
 
             # ---------------------------------------------------------
@@ -108,15 +108,22 @@ class LiveSeriesSensor(SensorEntity):
             if next_game:
                 self._state = "FUT"
                 self._attr_extra_state_attributes.update(next_game)
-                self._scan_interval = SCAN_INTERVAL_NORMAL
+                self.async_write_ha_state()
                 return
 
             # ---------------------------------------------------------
             # NO GAME
             # ---------------------------------------------------------
             self._state = "normal"
-            self._scan_interval = SCAN_INTERVAL_SERIES_OVER
+            self.async_write_ha_state()
 
         except Exception as err:
-            LOGGER.error("Live sensor update failed for %s: %s", self.series_key, err)
-            self._scan_interval = SCAN_INTERVAL_NORMAL
+            LOGGER.error("LiveSeriesSensor update failed for %s: %s", self.series_key, err)
+
+    @property
+    def native_value(self) -> str:
+        return self._state
+
+    @property
+    def extra_state_attributes(self) -> Dict[str, Any]:
+        return self._attr_extra_state_attributes
