@@ -35,12 +35,19 @@ def parse_live_game(raw: Dict[str, Any]) -> Dict[str, Any]:
             "winner": None,
             "series_code": None,
             "series_status": None,
+            "startTimeUTC": None,
         }
 
+    # -------------------------------------------------------------------------
+    # GAME STATE
+    # -------------------------------------------------------------------------
     game_state = (raw.get("gameState") or "").upper()
     if game_state == "CRIT":
         game_state = "LIVE"
 
+    # -------------------------------------------------------------------------
+    # TEAMS
+    # -------------------------------------------------------------------------
     home = raw.get("homeTeam", {})
     away = raw.get("awayTeam", {})
 
@@ -56,6 +63,9 @@ def parse_live_game(raw: Dict[str, Any]) -> Dict[str, Any]:
     home_shots = home.get("sog")
     away_shots = away.get("sog")
 
+    # -------------------------------------------------------------------------
+    # CLOCK + PERIOD
+    # -------------------------------------------------------------------------
     clock = raw.get("clock", {})
     time_remaining = clock.get("timeRemaining", "")
     is_intermission = clock.get("inIntermission", False)
@@ -63,36 +73,26 @@ def parse_live_game(raw: Dict[str, Any]) -> Dict[str, Any]:
     period = raw.get("displayPeriod") or raw.get("periodDescriptor", {}).get("number")
     period_ordinal = _compute_period_ordinal(period)
 
+    # -------------------------------------------------------------------------
+    # WINNER (FINAL or OFF)
+    # -------------------------------------------------------------------------
     winner = None
     if game_state in ("FINAL", "OFF"):
         if home_score > away_score:
             winner = home_team
         elif away_score > home_score:
             winner = away_team
-        
-    """LOGGER.warning("PARSED LIVE GAME OUTPUT: %s", {
-    "game_pk": raw.get("id"),
-    "game_state": game_state,
-    "home_team": home_team,
-    "away_team": away_team,
-    "home_score": home_score,
-    "away_score": away_score,
-    "current_period": period,
-    "current_period_ordinal": period_ordinal,
-    "period_time_remaining": time_remaining,
-    "is_intermission": is_intermission,
-    "home_logo": home_logo,
-    "away_logo": away_logo,
-    "home_shots": home_shots,
-    "away_shots": away_shots,
-    "winner": winner,
-    "series_code": raw.get("series_code"),
-    "series_status": raw.get("series_status"),
-    })"""
 
+    # -------------------------------------------------------------------------
+    # START TIME (modern NHL API)
+    # -------------------------------------------------------------------------
+    start_time = raw.get("startTimeUTC")
 
+    # -------------------------------------------------------------------------
+    # OUTPUT
+    # -------------------------------------------------------------------------
     return {
-        "game_pk": raw.get("id"),  # LiveCoordinator will overwrite this
+        "game_pk": raw.get("id"),
         "game_state": game_state,
         "home_team": home_team,
         "away_team": away_team,
@@ -109,5 +109,7 @@ def parse_live_game(raw: Dict[str, Any]) -> Dict[str, Any]:
         "winner": winner,
         "series_code": raw.get("series_code"),
         "series_status": raw.get("series_status"),
+        "startTimeUTC": start_time,  # <-- CORRECT FIELD
     }
+
 

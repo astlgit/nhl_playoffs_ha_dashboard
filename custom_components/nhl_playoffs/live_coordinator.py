@@ -23,6 +23,7 @@ FUT_LT3H_INTERVAL = 300    # FUT < 3 hours
 FUT_GT3H_INTERVAL = 3600   # FUT > 3 hours
 OFF_INTERVAL = 3600        # OFF / FINAL
 FINAL_COOLDOWN_SECONDS = 120
+DEFAULT_INTERVAL = 360
 
 
 class LiveCoordinator:
@@ -208,24 +209,28 @@ class LiveCoordinator:
             return LIVE_INTERVAL  # 5 seconds
 
         # PRE
-        if state == "PRE":
+        if state in ("PRE", "OVER"):
             return PRE_INTERVAL  # 30 seconds
 
         # FUT (time-based)
-        if state == "FUT" and start_str:
+        if state == "FUT":
             try:
                 start_dt = datetime.fromisoformat(start_str.replace("Z", "+00:00"))
                 now = datetime.utcnow()
                 diff = (start_dt - now).total_seconds()
 
-                if diff > 3 * 3600:       # > 3 hours
+                # Prevent negative values
+                diff = max(diff, 0)
+
+                if diff > 3 * 3600:
                     return FUT_GT3H_INTERVAL  # 3600
-                if diff > 60 * 60:        # 1–3 hours
+                if diff > 60 * 60:
                     return FUT_LT3H_INTERVAL  # 300
-                return PRE_INTERVAL       # < 60 minutes → 30 seconds
+                return PRE_INTERVAL  # < 60 minutes → 30 seconds
 
             except Exception:
-                return FUT_GT3H_INTERVAL
+                return DEFAULT_INTERVAL
+
 
         # FINAL → 120 seconds
         if state == "FINAL":
@@ -236,7 +241,7 @@ class LiveCoordinator:
             return OFF_INTERVAL
 
         # Default
-        return FUT_GT3H_INTERVAL
+        return DEFAULT_INTERVAL
 
     # -------------------------------------------------------------------------
     # Persistence

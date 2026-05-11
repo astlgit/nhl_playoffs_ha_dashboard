@@ -79,9 +79,9 @@ class LiveSeriesSensor(SensorEntity):
 
                 game_state = parsed.get("game_state", "")
 
-                if game_state in ("LIVE", "CRIT", "PRE"):
+                if game_state in ("LIVE", "CRIT", "PRE", "OVER", "FINAL"):
                     self._state = "live"
-                elif game_state in ("FINAL", "OFF"):
+                elif game_state == "OFF":
                     self._state = "final"
                 else:
                     self._state = "normal"
