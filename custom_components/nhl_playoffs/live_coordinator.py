@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 import asyncio
-from datetime import datetime
+from datetime import datetime, timezone
 
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.config_entries import ConfigEntry
@@ -215,22 +215,23 @@ class LiveCoordinator:
         # FUT (time-based)
         if state == "FUT":
             try:
-                start_dt = datetime.fromisoformat(start_str.replace("Z", "+00:00"))
-                now = datetime.utcnow()
+                # 1. Make start_dt timezone-aware
+                start_dt = datetime.fromisoformat(start_str.replace('Z', '+00:00'))
+                
+                # 2. Make 'now' timezone-aware (Crucial fix)
+                now = datetime.now(timezone.utc)
+                
+                # 3. Calculation will now work every hour as 'now' updates
                 diff = (start_dt - now).total_seconds()
-
-                # Prevent negative values
+                
                 diff = max(diff, 0)
-
                 if diff > 3 * 3600:
-                    return FUT_GT3H_INTERVAL  # 3600
-                if diff > 60 * 60:
-                    return FUT_LT3H_INTERVAL  # 300
-                return PRE_INTERVAL  # < 60 minutes → 30 seconds
-
+                    return FUT_GT3H_INTERVAL
+                if diff > 3600:
+                    return FUT_LT3H_INTERVAL
+                return PRE_INTERVAL
             except Exception:
                 return DEFAULT_INTERVAL
-
 
         # FINAL → 120 seconds
         if state == "FINAL":
