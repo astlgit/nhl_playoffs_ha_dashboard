@@ -1,1710 +1,722 @@
-resources:
-  - url: /hacsfiles/button-card/button-card.js
-    type: module
-  - url: /hacsfiles/layout-card/layout-card.js
-    type: module
+button_card_templates:
+  nhl_next_game:
+    custom_fields:
+      rotate: |
+        [[[
+          const a = entity.attributes;
+          const status = a.series_status || "";
+          let next = "";
 
-panel: true
-cards:
-  - type: grid
-    columns: 5
-    square: false
-    cards:
-      - type: vertical-stack
-        cards:
-          - type: custom:button-card
-            entity: sensor.playoffs_r1_west_1
-            show_icon: false
-            show_name: false
-            show_state: false
-            custom_fields:
-              score: |
-                [[[
-                  return states['sensor.playoffs_r1_west_1'].attributes.series_status;
-                ]]]
-              l1: |
-                [[[
-                  const logo = states['sensor.playoffs_r1_west_1'].attributes.team1_logo;
-                  return `<img src="${logo}" height="60">`;
-                ]]]
-              l2: |
-                [[[
-                  const logo = states['sensor.playoffs_r1_west_1'].attributes.team2_logo;
-                  return `<img src="${logo}" height="60">`;
-                ]]]
-              s1: |
-                [[[
-                  return states['sensor.playoffs_r1_west_1'].attributes.team1_seed;
-                ]]]
-              s2: |
-                [[[
-                  return states['sensor.playoffs_r1_west_1'].attributes.team2_seed;
-                ]]]
-              n1: |
-                [[[
-                  const full = states['sensor.playoffs_r1_west_1'].attributes.team1_name || "";
-                  const parts = full.trim().split(" ");
-                  return parts[parts.length - 1];   // nickname only
-                ]]]
-              n2: |
-                [[[
-                  const full = states['sensor.playoffs_r1_west_1'].attributes.team2_name || "";
-                  const parts = full.trim().split(" ");
-                  return parts[parts.length - 1];   // nickname only
-                ]]]
-            styles:
-              card:
-                - border: 1px solid rgba(255,255,255,0.35)
-                - border-radius: 14px
-                - padding: 8px
-                - height: 150px
-                - display: flex
-                - flex-direction: column
-                - justify-content: center
-                - align-items: center
-                - background: rgba(0,0,0,0.2)
-              grid:
-                - grid-template-areas: |
-                    "score score score"
-                    "l1 . l2"
-                    "s1 . s2"
-                    "n1 . n2"
-                - grid-template-columns: 1fr min-content 1fr
-                - grid-template-rows: auto auto auto auto
-              custom_fields:
-                score:
-                  - grid-area: score
-                  - font-size: 18px
-                  - font-weight: bold
-                  - color: white
-                  - text-align: center
-                  - margin-bottom: 4px
-                l1:
-                  - grid-area: l1
-                  - justify-self: center
-                l2:
-                  - grid-area: l2
-                  - justify-self: center
-                s1:
-                  - grid-area: s1
-                  - font-size: 13px
-                  - color: white
-                  - justify-self: center
-                s2:
-                  - grid-area: s2
-                  - font-size: 13px
-                  - color: white
-                  - justify-self: center
-                n1:
-                  - grid-area: n1
-                  - font-size: 14px
-                  - color: white
-                  - justify-self: center
-                  - white-space: normal
-                  - text-align: center
-                  - padding: 0 4px
-                n2:
-                  - grid-area: n2
-                  - font-size: 14px
-                  - color: white
-                  - justify-self: center
-                  - white-space: normal
-                  - text-align: center
-                  - padding: 0 4px
-          - type: custom:button-card
-            entity: sensor.playoffs_r1_west_2
-            show_icon: false
-            show_name: false
-            show_state: false
-            custom_fields:
-              score: |
-                [[[
-                  return states['sensor.playoffs_r1_west_2'].attributes.series_status;
-                ]]]
-              l1: |
-                [[[
-                  const logo = states['sensor.playoffs_r1_west_2'].attributes.team1_logo;
-                  return `<img src="${logo}" height="60">`;
-                ]]]
-              l2: |
-                [[[
-                  const logo = states['sensor.playoffs_r1_west_2'].attributes.team2_logo;
-                  return `<img src="${logo}" height="60">`;
-                ]]]
-              s1: |
-                [[[
-                  return states['sensor.playoffs_r1_west_2'].attributes.team1_seed;
-                ]]]
-              s2: |
-                [[[
-                  return states['sensor.playoffs_r1_west_2'].attributes.team2_seed;
-                ]]]
-              n1: |
-                [[[
-                  const full = states['sensor.playoffs_r1_west_2'].attributes.team1_name || "";
-                  const parts = full.trim().split(" ");
-                  return parts[parts.length - 1];
-                ]]]
-              n2: |
-                [[[
-                  const full = states['sensor.playoffs_r1_west_2'].attributes.team2_name || "";
-                  const parts = full.trim().split(" ");
-                  return parts[parts.length - 1];
-                ]]]
-            styles:
-              card:
-                - border: 1px solid rgba(255,255,255,0.35)
-                - border-radius: 14px
-                - padding: 8px
-                - height: 150px
-                - display: flex
-                - flex-direction: column
-                - justify-content: center
-                - align-items: center
-                - background: rgba(0,0,0,0.2)
-              grid:
-                - grid-template-areas: |
-                    "score score score"
-                    "l1 . l2"
-                    "s1 . s2"
-                    "n1 . n2"
-                - grid-template-columns: 1fr min-content 1fr
-                - grid-template-rows: auto auto auto auto
-              custom_fields:
-                score:
-                  - grid-area: score
-                  - font-size: 18px
-                  - font-weight: bold
-                  - color: white
-                  - text-align: center
-                  - margin-bottom: 4px
-                l1:
-                  - grid-area: l1
-                  - justify-self: center
-                l2:
-                  - grid-area: l2
-                  - justify-self: center
-                s1:
-                  - grid-area: s1
-                  - font-size: 13px
-                  - color: white
-                  - justify-self: center
-                s2:
-                  - grid-area: s2
-                  - font-size: 13px
-                  - color: white
-                  - justify-self: center
-                n1:
-                  - grid-area: n1
-                  - font-size: 14px
-                  - color: white
-                  - justify-self: center
-                  - white-space: normal
-                  - text-align: center
-                  - padding: 0 4px
-                n2:
-                  - grid-area: n2
-                  - font-size: 14px
-                  - color: white
-                  - justify-self: center
-                  - white-space: normal
-                  - text-align: center
-                  - padding: 0 4px
-          - type: custom:button-card
-            entity: sensor.playoffs_r1_west_3
-            show_icon: false
-            show_name: false
-            show_state: false
-            custom_fields:
-              score: |
-                [[[
-                  return states['sensor.playoffs_r1_west_3'].attributes.series_status;
-                ]]]
-              l1: |
-                [[[
-                  const logo = states['sensor.playoffs_r1_west_3'].attributes.team1_logo;
-                  return `<img src="${logo}" height="60">`;
-                ]]]
-              l2: |
-                [[[
-                  const logo = states['sensor.playoffs_r1_west_3'].attributes.team2_logo;
-                  return `<img src="${logo}" height="60">`;
-                ]]]
-              s1: |
-                [[[
-                  return states['sensor.playoffs_r1_west_3'].attributes.team1_seed;
-                ]]]
-              s2: |
-                [[[
-                  return states['sensor.playoffs_r1_west_3'].attributes.team2_seed;
-                ]]]
-              n1: |
-                [[[
-                  const full = states['sensor.playoffs_r1_west_3'].attributes.team1_name || "";
-                  const parts = full.trim().split(" ");
-                  return parts[parts.length - 1];
-                ]]]
-              n2: |
-                [[[
-                  const full = states['sensor.playoffs_r1_west_3'].attributes.team2_name || "";
-                  const parts = full.trim().split(" ");
-                  return parts[parts.length - 1];
-                ]]]
-            styles:
-              card:
-                - border: 1px solid rgba(255,255,255,0.35)
-                - border-radius: 14px
-                - padding: 8px
-                - height: 150px
-                - display: flex
-                - flex-direction: column
-                - justify-content: center
-                - align-items: center
-                - background: rgba(0,0,0,0.2)
-              grid:
-                - grid-template-areas: |
-                    "score score score"
-                    "l1 . l2"
-                    "s1 . s2"
-                    "n1 . n2"
-                - grid-template-columns: 1fr min-content 1fr
-                - grid-template-rows: auto auto auto auto
-              custom_fields:
-                score:
-                  - grid-area: score
-                  - font-size: 18px
-                  - font-weight: bold
-                  - color: white
-                  - text-align: center
-                  - margin-bottom: 4px
-                l1:
-                  - grid-area: l1
-                  - justify-self: center
-                l2:
-                  - grid-area: l2
-                  - justify-self: center
-                s1:
-                  - grid-area: s1
-                  - font-size: 13px
-                  - color: white
-                  - justify-self: center
-                s2:
-                  - grid-area: s2
-                  - font-size: 13px
-                  - color: white
-                  - justify-self: center
-                n1:
-                  - grid-area: n1
-                  - font-size: 14px
-                  - color: white
-                  - justify-self: center
-                  - white-space: normal
-                  - text-align: center
-                  - padding: 0 4px
-                n2:
-                  - grid-area: n2
-                  - font-size: 14px
-                  - color: white
-                  - justify-self: center
-                  - white-space: normal
-                  - text-align: center
-                  - padding: 0 4px
-          - type: custom:button-card
-            entity: sensor.playoffs_r1_west_4
-            show_icon: false
-            show_name: false
-            show_state: false
-            custom_fields:
-              score: |
-                [[[
-                  return states['sensor.playoffs_r1_west_4'].attributes.series_status;
-                ]]]
-              l1: |
-                [[[
-                  const logo = states['sensor.playoffs_r1_west_4'].attributes.team1_logo;
-                  return `<img src="${logo}" height="60">`;
-                ]]]
-              l2: |
-                [[[
-                  const logo = states['sensor.playoffs_r1_west_4'].attributes.team2_logo;
-                  return `<img src="${logo}" height="60">`;
-                ]]]
-              s1: |
-                [[[
-                  return states['sensor.playoffs_r1_west_4'].attributes.team1_seed;
-                ]]]
-              s2: |
-                [[[
-                  return states['sensor.playoffs_r1_west_4'].attributes.team2_seed;
-                ]]]
-              n1: |
-                [[[
-                  const full = states['sensor.playoffs_r1_west_4'].attributes.team1_name || "";
-                  const parts = full.trim().split(" ");
-                  return parts[parts.length - 1];
-                ]]]
-              n2: |
-                [[[
-                  const full = states['sensor.playoffs_r1_west_4'].attributes.team2_name || "";
-                  const parts = full.trim().split(" ");
-                  return parts[parts.length - 1];
-                ]]]
-            styles:
-              card:
-                - border: 1px solid rgba(255,255,255,0.35)
-                - border-radius: 14px
-                - padding: 8px
-                - height: 150px
-                - display: flex
-                - flex-direction: column
-                - justify-content: center
-                - align-items: center
-                - background: rgba(0,0,0,0.2)
-              grid:
-                - grid-template-areas: |
-                    "score score score"
-                    "l1 . l2"
-                    "s1 . s2"
-                    "n1 . n2"
-                - grid-template-columns: 1fr min-content 1fr
-                - grid-template-rows: auto auto auto auto
-              custom_fields:
-                score:
-                  - grid-area: score
-                  - font-size: 18px
-                  - font-weight: bold
-                  - color: white
-                  - text-align: center
-                  - margin-bottom: 4px
-                l1:
-                  - grid-area: l1
-                  - justify-self: center
-                l2:
-                  - grid-area: l2
-                  - justify-self: center
-                s1:
-                  - grid-area: s1
-                  - font-size: 13px
-                  - color: white
-                  - justify-self: center
-                s2:
-                  - grid-area: s2
-                  - font-size: 13px
-                  - color: white
-                  - justify-self: center
-                n1:
-                  - grid-area: n1
-                  - font-size: 14px
-                  - color: white
-                  - justify-self: center
-                  - white-space: normal
-                  - text-align: center
-                  - padding: 0 4px
-                n2:
-                  - grid-area: n2
-                  - font-size: 14px
-                  - color: white
-                  - justify-self: center
-                  - white-space: normal
-                  - text-align: center
-                  - padding: 0 4px
-      - type: vertical-stack
-        cards:
-          - type: button
-            name: Western Conference
-          - type: custom:layout-card
-            layout_type: grid
-            layout:
-              grid-template-columns: 1fr 1fr 1fr 1fr
-              grid-template-rows: auto auto auto
-              grid-template-areas: |
-                "r2w1 r2w1 r2w1 blank1"
-                "blank2 blank2 blank2 blank2"
-                "blankx final final final"
-                "r2w2 r2w2 r2w2 blank3"
-            cards:
-              - type: custom:button-card
-                entity: sensor.playoffs_r2_west_1
-                show_icon: false
-                show_name: false
-                show_state: false
-                view_layout:
-                  grid-area: r2w1
-                custom_fields:
-                  score: |
-                    [[[
-                      return states['sensor.playoffs_r2_west_1'].attributes.series_status || "";
-                    ]]]
-                  l1: |
-                    [[[
-                      const logo = states['sensor.playoffs_r2_west_1'].attributes.team1_logo;
-                      return logo ? `<img src="${logo}" height="80">` : "";
-                    ]]]
-                  l2: |
-                    [[[
-                      const logo = states['sensor.playoffs_r2_west_1'].attributes.team2_logo;
-                      return logo ? `<img src="${logo}" height="80">` : "";
-                    ]]]
-                  s1: |
-                    [[[
-                      return states['sensor.playoffs_r2_west_1'].attributes.team1_seed || "";
-                    ]]]
-                  s2: |
-                    [[[
-                      return states['sensor.playoffs_r2_west_1'].attributes.team2_seed || "";
-                    ]]]
-                  n1: |
-                    [[[
-                      const full = states['sensor.playoffs_r2_west_1'].attributes.team1_name || "";
-                      const parts = full.trim().split(" ");
-                      return parts[parts.length - 1];
-                    ]]]
-                  n2: |
-                    [[[
-                      const full = states['sensor.playoffs_r2_west_1'].attributes.team2_name || "";
-                      const parts = full.trim().split(" ");
-                      return parts[parts.length - 1];
-                    ]]]
-                styles:
-                  card:
-                    - border: 1px solid rgba(255,255,255,0.35)
-                    - border-radius: 14px
-                    - padding: 8px
-                    - height: 150px
-                    - display: flex
-                    - flex-direction: column
-                    - justify-content: center
-                    - align-items: center
-                    - background: rgba(0,0,0,0.2)
-                  grid:
-                    - grid-template-areas: |
-                        "score score score"
-                        "l1 . l2"
-                        "s1 . s2"
-                        "n1 . n2"
-                    - grid-template-columns: 1fr min-content 1fr
-                    - grid-template-rows: auto auto auto auto
-                  custom_fields:
-                    score:
-                      - grid-area: score
-                      - font-size: 18px
-                      - font-weight: bold
-                      - color: white
-                      - text-align: center
-                      - margin-bottom: 4px
-                    l1:
-                      - grid-area: l1
-                      - justify-self: center
-                    l2:
-                      - grid-area: l2
-                      - justify-self: center
-                    s1:
-                      - grid-area: s1
-                      - font-size: 13px
-                      - color: white
-                      - justify-self: center
-                    s2:
-                      - grid-area: s2
-                      - font-size: 13px
-                      - color: white
-                      - justify-self: center
-                    n1:
-                      - grid-area: n1
-                      - font-size: 14px
-                      - color: white
-                      - justify-self: center
-                      - white-space: normal
-                      - text-align: center
-                      - padding: 0 4px
-                    n2:
-                      - grid-area: n2
-                      - font-size: 14px
-                      - color: white
-                      - justify-self: center
-                      - white-space: normal
-                      - text-align: center
-                      - padding: 0 4px
-              - type: custom:button-card
-                name: ""
-                view_layout:
-                  grid-area: blank1
-                styles:
-                  card:
-                    - background: none
-                    - border: none
-                    - box-shadow: none
-              - type: custom:button-card
-                name: WESTERN FINALS
-                view_layout:
-                  grid-area: blank2
-                  grid-column: 2 / span 3
-                styles:
-                  card:
-                    - background: none
-                    - border: none
-                    - box-shadow: none
-                    - padding: 0
-                    - height: 32px
-                    - display: flex
-                    - justify-content: center
-                    - align-items: center
-                  name:
-                    - font-size: 20px
-                    - font-weight: bold
-                    - color: white
-                    - text-align: center
-              - type: custom:button-card
-                name: ""
-                view_layout:
-                  grid-area: blankx
-                styles:
-                  card:
-                    - background: none
-                    - border: none
-                    - box-shadow: none
-              - type: custom:button-card
-                entity: sensor.playoffs_west_final
-                show_icon: false
-                show_name: false
-                show_state: false
-                view_layout:
-                  grid-area: final
-                custom_fields:
-                  score: |
-                    [[[
-                      return states['sensor.playoffs_west_final'].attributes.series_status || "";
-                    ]]]
-                  l1: |
-                    [[[
-                      const logo = states['sensor.playoffs_west_final'].attributes.team1_logo;
-                      return logo ? `<img src="${logo}" height="80">` : "";
-                    ]]]
-                  l2: |
-                    [[[
-                      const logo = states['sensor.playoffs_west_final'].attributes.team2_logo;
-                      return logo ? `<img src="${logo}" height="80">` : "";
-                    ]]]
-                  s1: |
-                    [[[
-                      return states['sensor.playoffs_west_final'].attributes.team1_seed || "";
-                    ]]]
-                  s2: |
-                    [[[
-                      return states['sensor.playoffs_west_final'].attributes.team2_seed || "";
-                    ]]]
-                  n1: |
-                    [[[
-                      const full = states['sensor.playoffs_west_final'].attributes.team1_name || "";
-                      const parts = full.trim().split(" ");
-                      return parts[parts.length - 1];
-                    ]]]
-                  n2: |
-                    [[[
-                      const full = states['sensor.playoffs_west_final'].attributes.team2_name || "";
-                      const parts = full.trim().split(" ");
-                      return parts[parts.length - 1];
-                    ]]]
-                styles:
-                  card:
-                    - border: 2px solid rgba(0,94,184,0.9)
-                    - box-shadow: 0 0 12px 3px rgba(77,163,255,0.55)
-                    - border-radius: 14px
-                    - padding: 8px
-                    - height: 150px
-                    - display: flex
-                    - flex-direction: column
-                    - justify-content: center
-                    - align-items: center
-                    - background: rgba(0,0,0,0.2)
-                  grid:
-                    - grid-template-areas: |
-                        "score score score"
-                        "l1 . l2"
-                        "s1 . s2"
-                        "n1 . n2"
-                    - grid-template-columns: 1fr min-content 1fr
-                    - grid-template-rows: auto auto auto auto
-                  custom_fields:
-                    score:
-                      - grid-area: score
-                      - font-size: 18px
-                      - font-weight: bold
-                      - color: white
-                      - text-align: center
-                      - margin-bottom: 4px
-                    l1:
-                      - grid-area: l1
-                      - justify-self: center
-                    l2:
-                      - grid-area: l2
-                      - justify-self: center
-                    s1:
-                      - grid-area: s1
-                      - font-size: 13px
-                      - color: white
-                      - justify-self: center
-                    s2:
-                      - grid-area: s2
-                      - font-size: 13px
-                      - color: white
-                      - justify-self: center
-                    n1:
-                      - grid-area: n1
-                      - font-size: 14px
-                      - color: white
-                      - justify-self: center
-                      - white-space: normal
-                      - text-align: center
-                      - padding: 0 4px
-                    n2:
-                      - grid-area: n2
-                      - font-size: 14px
-                      - color: white
-                      - justify-self: center
-                      - white-space: normal
-                      - text-align: center
-                      - padding: 0 4px
-              - type: custom:button-card
-                entity: sensor.playoffs_r2_west_2
-                show_icon: false
-                show_name: false
-                show_state: false
-                view_layout:
-                  grid-area: r2w2
-                custom_fields:
-                  score: |
-                    [[[
-                      return states['sensor.playoffs_r2_west_2'].attributes.series_status || "";
-                    ]]]
-                  l1: |
-                    [[[
-                      const logo = states['sensor.playoffs_r2_west_2'].attributes.team1_logo;
-                      return logo ? `<img src="${logo}" height="80">` : "";
-                    ]]]
-                  l2: |
-                    [[[
-                      const logo = states['sensor.playoffs_r2_west_2'].attributes.team2_logo;
-                      return logo ? `<img src="${logo}" height="80">` : "";
-                    ]]]
-                  s1: |
-                    [[[
-                      return states['sensor.playoffs_r2_west_2'].attributes.team1_seed || "";
-                    ]]]
-                  s2: |
-                    [[[
-                      return states['sensor.playoffs_r2_west_2'].attributes.team2_seed || "";
-                    ]]]
-                  n1: |
-                    [[[
-                      const full = states['sensor.playoffs_r2_west_2'].attributes.team1_name || "";
-                      const parts = full.trim().split(" ");
-                      return parts[parts.length - 1];
-                    ]]]
-                  n2: |
-                    [[[
-                      const full = states['sensor.playoffs_r2_west_2'].attributes.team2_name || "";
-                      const parts = full.trim().split(" ");
-                      return parts[parts.length - 1];
-                    ]]]
-                styles:
-                  card:
-                    - border: 1px solid rgba(255,255,255,0.35)
-                    - border-radius: 14px
-                    - padding: 8px
-                    - height: 150px
-                    - display: flex
-                    - flex-direction: column
-                    - justify-content: center
-                    - align-items: center
-                    - background: rgba(0,0,0,0.2)
-                  grid:
-                    - grid-template-areas: |
-                        "score score score"
-                        "l1 . l2"
-                        "s1 . s2"
-                        "n1 . n2"
-                    - grid-template-columns: 1fr min-content 1fr
-                    - grid-template-rows: auto auto auto auto
-                  custom_fields:
-                    score:
-                      - grid-area: score
-                      - font-size: 18px
-                      - font-weight: bold
-                      - color: white
-                      - text-align: center
-                      - margin-bottom: 4px
-                    l1:
-                      - grid-area: l1
-                      - justify-self: center
-                    l2:
-                      - grid-area: l2
-                      - justify-self: center
-                    s1:
-                      - grid-area: s1
-                      - font-size: 13px
-                      - color: white
-                      - justify-self: center
-                    s2:
-                      - grid-area: s2
-                      - font-size: 13px
-                      - color: white
-                      - justify-self: center
-                    n1:
-                      - grid-area: n1
-                      - font-size: 14px
-                      - color: white
-                      - justify-self: center
-                      - white-space: normal
-                      - text-align: center
-                      - padding: 0 4px
-                    n2:
-                      - grid-area: n2
-                      - font-size: 14px
-                      - color: white
-                      - justify-self: center
-                      - white-space: normal
-                      - text-align: center
-                      - padding: 0 4px
-              - type: custom:button-card
-                name: ""
-                view_layout:
-                  grid-area: blank3
-                styles:
-                  card:
-                    - background: none
-                    - border: none
-                    - box-shadow: none
-      - type: vertical-stack
-        cards:
-          - type: custom:button-card
-            name: |
-              <div style="
-                display:flex;
-                flex-direction:column;
-                align-items:center;
-                justify-content:center;
-                padding-top:10px;
-              ">
-                <div style="
-                  background: linear-gradient(180deg, #1a1a1a 0%, #000 100%);
-                  border: 2px solid rgba(255,255,255,0.25);
-                  border-radius: 14px;
-                  padding: 20px 20px;
-                  width: 320px;
-                  display:flex;
-                  flex-direction:column;
-                  align-items:center;
-                  box-shadow: 0 0 14px rgba(0,0,0,0.6);
-                ">
-                  <img src="https://assets.nhle.com/logos/playoffs/png/scp-20252026-cup.png"
-                       height="220"
-                       style="margin-bottom:14px;">
+          if (a.next_game_time) {
+            const d = new Date(a.next_game_time);
+            const now = new Date();
+            const isToday = d.getFullYear() === now.getFullYear() && 
+                            d.getMonth() === now.getMonth() && 
+                            d.getDate() === now.getDate();
+            const gameNum = a.next_game_number ? `Game ${a.next_game_number}` : "";
 
-                  <div style="
-                    font-size:24px;
-                    font-weight:900;
-                    letter-spacing:1px;
-                    color:white;
-                    text-transform:uppercase;
-                    text-align:center;
-                  ">
-                    Stanley Cup Final
-                  </div>
+            if (isToday) {
+              next = `${gameNum} · ${d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}`;
+            } else {
+              next = `${gameNum} · ${d.toLocaleDateString([], { weekday: 'short' })} ${d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}`;
+            }
+          }
 
-                  <div style="
-                    font-size:20px;
-                    font-weight:800;
-                    color:#d4d4d4;
-                    margin-top:8px;
-                  ">
-                    2026
-                  </div>
-                </div>
+          if (!next) {
+            return `
+              <div class="fade-rotator no-anim">
+                <div class="fade-item" style="opacity:1">${status}</div>
               </div>
-            styles:
-              card:
-                - background: none
-                - border: none
-                - box-shadow: none
-                - padding: 0
-                - height: 320px
-                - display: flex
-                - justify-content: center
-                - align-items: center
-              name:
-                - justify-self: center
-                - text-align: center
-          - type: custom:button-card
-            entity: sensor.stanley_cup_final
-            show_icon: false
-            show_name: false
-            show_state: false
-            custom_fields:
-              score: |
-                [[[
-                  const s = states['sensor.stanley_cup_final'];
-                  if (!s || !s.attributes) return "TBD";
-                  return s.attributes.series_status || "TBD";
-                ]]]
-              l1: |
-                [[[
-                  const s = states['sensor.stanley_cup_final'];
-                  if (!s || !s.attributes || !s.attributes.team1_logo)
-                    return `<div style="font-size:22px;color:white;">TBD</div>`;
-                  const a = s.attributes;
-                  const winner = a.team1_wins > a.team2_wins;
-                  const size = winner ? 120 : 80;
-                  const glow = winner ? "filter: drop-shadow(0 0 14px gold);" : "";
-                  return `<img src="${a.team1_logo}" height="${size}" style="${glow}">`;
-                ]]]
-              l2: |
-                [[[
-                  const s = states['sensor.stanley_cup_final'];
-                  if (!s || !s.attributes || !s.attributes.team2_logo)
-                    return `<div style="font-size:22px;color:white;">TBD</div>`;
-                  const a = s.attributes;
-                  const winner = a.team2_wins > a.team1_wins;
-                  const size = winner ? 120 : 80;
-                  const glow = winner ? "filter: drop-shadow(0 0 14px gold);" : "";
-                  return `<img src="${a.team2_logo}" height="${size}" style="${glow}">`;
-                ]]]
-              s1: |
-                [[[
-                  const s = states['sensor.stanley_cup_final'];
-                  if (!s || !s.attributes) return "—";
-                  return s.attributes.team1_seed || "—";
-                ]]]
-              s2: |
-                [[[
-                  const s = states['sensor.stanley_cup_final'];
-                  if (!s || !s.attributes) return "—";
-                  return s.attributes.team2_seed || "—";
-                ]]]
-              n1: |
-                [[[
-                  const s = states['sensor.stanley_cup_final'];
-                  if (!s || !s.attributes || !s.attributes.team1_name) return "TBD";
-                  const full = s.attributes.team1_name;
-                  const parts = full.trim().split(" ");
-                  return parts[parts.length - 1];
-                ]]]
-              n2: |
-                [[[
-                  const s = states['sensor.stanley_cup_final'];
-                  if (!s || !s.attributes || !s.attributes.team2_name) return "TBD";
-                  const full = s.attributes.team2_name;
-                  const parts = full.trim().split(" ");
-                  return parts[parts.length - 1];
-                ]]]
-            styles:
-              card:
-                - border: 2px solid rgba(255,215,0,0.8)
-                - box-shadow: 0 0 14px 4px rgba(255,215,0,0.55)
-                - border-radius: 14px
-                - padding: 10px
-                - height: 200px
-                - display: flex
-                - flex-direction: column
-                - justify-content: center
-                - align-items: center
-                - background: rgba(0,0,0,0.25)
-              grid:
-                - grid-template-areas: |
-                    "score score score"
-                    "l1 . l2"
-                    "s1 . s2"
-                    "n1 . n2"
-                - grid-template-columns: 1fr min-content 1fr
-                - grid-template-rows: auto auto auto auto
-              custom_fields:
-                score:
-                  - grid-area: score
-                  - font-size: 22px
-                  - font-weight: bold
-                  - color: white
-                  - text-align: center
-                  - margin-bottom: 6px
-                l1:
-                  - grid-area: l1
-                  - justify-self: center
-                l2:
-                  - grid-area: l2
-                  - justify-self: center
-                s1:
-                  - grid-area: s1
-                  - font-size: 14px
-                  - color: white
-                  - justify-self: center
-                s2:
-                  - grid-area: s2
-                  - font-size: 14px
-                  - color: white
-                  - justify-self: center
-                n1:
-                  - grid-area: n1
-                  - font-size: 16px
-                  - color: white
-                  - justify-self: center
-                  - white-space: normal
-                  - text-align: center
-                  - padding: 0 4px
-                n2:
-                  - grid-area: n2
-                  - font-size: 16px
-                  - color: white
-                  - justify-self: center
-                  - white-space: normal
-                  - text-align: center
-                  - padding: 0 4px
-      - type: vertical-stack
-        cards:
-          - type: button
-            name: Eastern Conference
-          - type: custom:layout-card
-            layout_type: grid
-            layout:
-              grid-template-columns: 1fr 1fr 1fr 1fr
-              grid-template-rows: auto auto auto auto
-              grid-template-areas: |
-                "blank1 r2e1 r2e1 r2e1"
-                "e_title e_title e_title e_title"
-                "final final final blankX"
-                "blank3 r2e2 r2e2 r2e2"
-            cards:
-              - type: custom:button-card
-                entity: sensor.playoffs_r2_east_1
-                show_icon: false
-                show_name: false
-                show_state: false
-                view_layout:
-                  grid-area: r2e1
-                custom_fields:
-                  score: |
-                    [[[
-                      return states['sensor.playoffs_r2_east_1'].attributes.series_status || "";
-                    ]]]
-                  l1: |
-                    [[[
-                      const logo = states['sensor.playoffs_r2_east_1'].attributes.team1_logo;
-                      return logo ? `<img src="${logo}" height="80">` : "";
-                    ]]]
-                  l2: |
-                    [[[
-                      const logo = states['sensor.playoffs_r2_east_1'].attributes.team2_logo;
-                      return logo ? `<img src="${logo}" height="80">` : "";
-                    ]]]
-                  s1: |
-                    [[[
-                      return states['sensor.playoffs_r2_east_1'].attributes.team1_seed || "";
-                    ]]]
-                  s2: |
-                    [[[
-                      return states['sensor.playoffs_r2_east_1'].attributes.team2_seed || "";
-                    ]]]
-                  n1: |
-                    [[[
-                      const full = states['sensor.playoffs_r2_east_1'].attributes.team1_name || "";
-                      const parts = full.trim().split(" ");
-                      return parts[parts.length - 1];
-                    ]]]
-                  n2: |
-                    [[[
-                      const full = states['sensor.playoffs_r2_east_1'].attributes.team2_name || "";
-                      const parts = full.trim().split(" ");
-                      return parts[parts.length - 1];
-                    ]]]
-                styles:
-                  card:
-                    - border: 1px solid rgba(255,255,255,0.35)
-                    - border-radius: 14px
-                    - padding: 8px
-                    - height: 150px
-                    - display: flex
-                    - flex-direction: column
-                    - justify-content: center
-                    - align-items: center
-                    - background: rgba(0,0,0,0.2)
-                  grid:
-                    - grid-template-areas: |
-                        "score score score"
-                        "l1 . l2"
-                        "s1 . s2"
-                        "n1 . n2"
-                    - grid-template-columns: 1fr min-content 1fr
-                    - grid-template-rows: auto auto auto auto
-                  custom_fields:
-                    score:
-                      - grid-area: score
-                      - font-size: 18px
-                      - font-weight: bold
-                      - color: white
-                      - text-align: center
-                      - margin-bottom: 4px
-                    l1:
-                      - grid-area: l1
-                      - justify-self: center
-                    l2:
-                      - grid-area: l2
-                      - justify-self: center
-                    s1:
-                      - grid-area: s1
-                      - font-size: 13px
-                      - color: white
-                      - justify-self: center
-                    s2:
-                      - grid-area: s2
-                      - font-size: 13px
-                      - color: white
-                      - justify-self: center
-                    n1:
-                      - grid-area: n1
-                      - font-size: 14px
-                      - color: white
-                      - justify-self: center
-                      - white-space: normal
-                      - text-align: center
-                      - padding: 0 4px
-                    n2:
-                      - grid-area: n2
-                      - font-size: 14px
-                      - color: white
-                      - justify-self: center
-                      - white-space: normal
-                      - text-align: center
-                      - padding: 0 4px
-              - type: custom:button-card
-                name: EASTERN FINALS
-                view_layout:
-                  grid-area: e_title
-                  grid-column: 1 / span 3
-                styles:
-                  card:
-                    - background: none
-                    - border: none
-                    - box-shadow: none
-                    - padding: 0
-                    - height: 32px
-                    - display: flex
-                    - justify-content: center
-                    - align-items: center
-                  name:
-                    - font-size: 20px
-                    - font-weight: bold
-                    - color: white
-                    - text-align: center
-              - type: custom:button-card
-                entity: sensor.playoffs_east_final
-                show_icon: false
-                show_name: false
-                show_state: false
-                view_layout:
-                  grid-area: final
-                  grid-column: 1 / span 3
-                custom_fields:
-                  score: |
-                    [[[
-                      return states['sensor.playoffs_east_final'].attributes.series_status || "";
-                    ]]]
-                  l1: |
-                    [[[
-                      const logo = states['sensor.playoffs_east_final'].attributes.team1_logo;
-                      return logo ? `<img src="${logo}" height="80">` : "";
-                    ]]]
-                  l2: |
-                    [[[
-                      const logo = states['sensor.playoffs_east_final'].attributes.team2_logo;
-                      return logo ? `<img src="${logo}" height="80">` : "";
-                    ]]]
-                  s1: |
-                    [[[
-                      return states['sensor.playoffs_east_final'].attributes.team1_seed || "";
-                    ]]]
-                  s2: |
-                    [[[
-                      return states['sensor.playoffs_east_final'].attributes.team2_seed || "";
-                    ]]]
-                  n1: |
-                    [[[
-                      const full = states['sensor.playoffs_east_final'].attributes.team1_name || "";
-                      const parts = full.trim().split(" ");
-                      return parts[parts.length - 1];
-                    ]]]
-                  n2: |
-                    [[[
-                      const full = states['sensor.playoffs_east_final'].attributes.team2_name || "";
-                      const parts = full.trim().split(" ");
-                      return parts[parts.length - 1];
-                    ]]]
-                styles:
-                  card:
-                    - border: 2px solid rgba(200,16,46,0.9)
-                    - box-shadow: 0 0 12px 3px rgba(255,77,106,0.55)
-                    - border-radius: 14px
-                    - padding: 8px
-                    - height: 150px
-                    - display: flex
-                    - flex-direction: column
-                    - justify-content: center
-                    - align-items: center
-                    - background: rgba(0,0,0,0.2)
-                  grid:
-                    - grid-template-areas: |
-                        "score score score"
-                        "l1 . l2"
-                        "s1 . s2"
-                        "n1 . n2"
-                    - grid-template-columns: 1fr min-content 1fr
-                    - grid-template-rows: auto auto auto auto
-                  custom_fields:
-                    score:
-                      - grid-area: score
-                      - font-size: 18px
-                      - font-weight: bold
-                      - color: white
-                      - text-align: center
-                      - margin-bottom: 4px
-                    l1:
-                      - grid-area: l1
-                      - justify-self: center
-                    l2:
-                      - grid-area: l2
-                      - justify-self: center
-                    s1:
-                      - grid-area: s1
-                      - font-size: 13px
-                      - color: white
-                      - justify-self: center
-                    s2:
-                      - grid-area: s2
-                      - font-size: 13px
-                      - color: white
-                      - justify-self: center
-                    n1:
-                      - grid-area: n1
-                      - font-size: 14px
-                      - color: white
-                      - justify-self: center
-                      - white-space: normal
-                      - text-align: center
-                      - padding: 0 4px
-                    n2:
-                      - grid-area: n2
-                      - font-size: 14px
-                      - color: white
-                      - justify-self: center
-                      - white-space: normal
-                      - text-align: center
-                      - padding: 0 4px
-              - type: custom:button-card
-                entity: sensor.playoffs_r2_east_2
-                show_icon: false
-                show_name: false
-                show_state: false
-                view_layout:
-                  grid-area: r2e2
-                custom_fields:
-                  score: |
-                    [[[
-                      return states['sensor.playoffs_r2_east_2'].attributes.series_status || "";
-                    ]]]
-                  l1: |
-                    [[[
-                      const logo = states['sensor.playoffs_r2_east_2'].attributes.team1_logo;
-                      return logo ? `<img src="${logo}" height="80">` : "";
-                    ]]]
-                  l2: |
-                    [[[
-                      const logo = states['sensor.playoffs_r2_east_2'].attributes.team2_logo;
-                      return logo ? `<img src="${logo}" height="80">` : "";
-                    ]]]
-                  s1: |
-                    [[[
-                      return states['sensor.playoffs_r2_east_2'].attributes.team1_seed || "";
-                    ]]]
-                  s2: |
-                    [[[
-                      return states['sensor.playoffs_r2_east_2'].attributes.team2_seed || "";
-                    ]]]
-                  n1: |
-                    [[[
-                      const full = states['sensor.playoffs_r2_east_2'].attributes.team1_name || "";
-                      const parts = full.trim().split(" ");
-                      return parts[parts.length - 1];
-                    ]]]
-                  n2: |
-                    [[[
-                      const full = states['sensor.playoffs_r2_east_2'].attributes.team2_name || "";
-                      const parts = full.trim().split(" ");
-                      return parts[parts.length - 1];
-                    ]]]
-                styles:
-                  card:
-                    - border: 1px solid rgba(255,255,255,0.35)
-                    - border-radius: 14px
-                    - padding: 8px
-                    - height: 150px
-                    - display: flex
-                    - flex-direction: column
-                    - justify-content: center
-                    - align-items: center
-                    - background: rgba(0,0,0,0.2)
-                  grid:
-                    - grid-template-areas: |
-                        "score score score"
-                        "l1 . l2"
-                        "s1 . s2"
-                        "n1 . n2"
-                    - grid-template-columns: 1fr min-content 1fr
-                    - grid-template-rows: auto auto auto auto
-                  custom_fields:
-                    score:
-                      - grid-area: score
-                      - font-size: 18px
-                      - font-weight: bold
-                      - color: white
-                      - text-align: center
-                      - margin-bottom: 4px
-                    l1:
-                      - grid-area: l1
-                      - justify-self: center
-                    l2:
-                      - grid-area: l2
-                      - justify-self: center
-                    s1:
-                      - grid-area: s1
-                      - font-size: 13px
-                      - color: white
-                      - justify-self: center
-                    s2:
-                      - grid-area: s2
-                      - font-size: 13px
-                      - color: white
-                      - justify-self: center
-                    n1:
-                      - grid-area: n1
-                      - font-size: 14px
-                      - color: white
-                      - justify-self: center
-                      - white-space: normal
-                      - text-align: center
-                      - padding: 0 4px
-                    n2:
-                      - grid-area: n2
-                      - font-size: 14px
-                      - color: white
-                      - justify-self: center
-                      - white-space: normal
-                      - text-align: center
-                      - padding: 0 4px
-      - type: vertical-stack
-        cards:
-          - type: custom:button-card
-            entity: sensor.playoffs_r1_east_1
-            show_icon: false
-            show_name: false
-            show_state: false
-            custom_fields:
-              score: |
-                [[[
-                  return states['sensor.playoffs_r1_east_1'].attributes.series_status;
-                ]]]
-              l1: |
-                [[[
-                  const logo = states['sensor.playoffs_r1_east_1'].attributes.team1_logo;
-                  return `<img src="${logo}" height="60">`;
-                ]]]
-              l2: |
-                [[[
-                  const logo = states['sensor.playoffs_r1_east_1'].attributes.team2_logo;
-                  return `<img src="${logo}" height="60">`;
-                ]]]
-              s1: |
-                [[[
-                  return states['sensor.playoffs_r1_east_1'].attributes.team1_seed;
-                ]]]
-              s2: |
-                [[[
-                  return states['sensor.playoffs_r1_east_1'].attributes.team2_seed;
-                ]]]
-              n1: |
-                [[[
-                  const full = states['sensor.playoffs_r1_east_1'].attributes.team1_name || "";
-                  const parts = full.trim().split(" ");
-                  return parts[parts.length - 1];
-                ]]]
-              n2: |
-                [[[
-                  const full = states['sensor.playoffs_r1_east_1'].attributes.team2_name || "";
-                  const parts = full.trim().split(" ");
-                  return parts[parts.length - 1];
-                ]]]
-            styles:
-              card:
-                - border: 1px solid rgba(255,255,255,0.35)
-                - border-radius: 14px
-                - padding: 8px
-                - height: 150px
-                - display: flex
-                - flex-direction: column
-                - justify-content: center
-                - align-items: center
-                - background: rgba(0,0,0,0.2)
-              grid:
-                - grid-template-areas: |
-                    "score score score"
-                    "l1 . l2"
-                    "s1 . s2"
-                    "n1 . n2"
-                - grid-template-columns: 1fr min-content 1fr
-                - grid-template-rows: auto auto auto auto
-              custom_fields:
-                score:
-                  - grid-area: score
-                  - font-size: 18px
-                  - font-weight: bold
-                  - color: white
-                  - text-align: center
-                  - margin-bottom: 4px
-                l1:
-                  - grid-area: l1
-                  - justify-self: center
-                l2:
-                  - grid-area: l2
-                  - justify-self: center
-                s1:
-                  - grid-area: s1
-                  - font-size: 13px
-                  - color: white
-                  - justify-self: center
-                s2:
-                  - grid-area: s2
-                  - font-size: 13px
-                  - color: white
-                  - justify-self: center
-                n1:
-                  - grid-area: n1
-                  - font-size: 14px
-                  - color: white
-                  - justify-self: center
-                  - white-space: normal
-                  - text-align: center
-                  - padding: 0 4px
-                n2:
-                  - grid-area: n2
-                  - font-size: 14px
-                  - color: white
-                  - justify-self: center
-                  - white-space: normal
-                  - text-align: center
-                  - padding: 0 4px
-          - type: custom:button-card
-            entity: sensor.playoffs_r1_east_2
-            show_icon: false
-            show_name: false
-            show_state: false
-            custom_fields:
-              score: |
-                [[[
-                  return states['sensor.playoffs_r1_east_2'].attributes.series_status;
-                ]]]
-              l1: |
-                [[[
-                  const logo = states['sensor.playoffs_r1_east_2'].attributes.team1_logo;
-                  return `<img src="${logo}" height="60">`;
-                ]]]
-              l2: |
-                [[[
-                  const logo = states['sensor.playoffs_r1_east_2'].attributes.team2_logo;
-                  return `<img src="${logo}" height="60">`;
-                ]]]
-              s1: |
-                [[[
-                  return states['sensor.playoffs_r1_east_2'].attributes.team1_seed;
-                ]]]
-              s2: |
-                [[[
-                  return states['sensor.playoffs_r1_east_2'].attributes.team2_seed;
-                ]]]
-              n1: |
-                [[[
-                  const full = states['sensor.playoffs_r1_east_2'].attributes.team1_name || "";
-                  const parts = full.trim().split(" ");
-                  return parts[parts.length - 1];
-                ]]]
-              n2: |
-                [[[
-                  const full = states['sensor.playoffs_r1_east_2'].attributes.team2_name || "";
-                  const parts = full.trim().split(" ");
-                  return parts[parts.length - 1];
-                ]]]
-            styles:
-              card:
-                - border: 1px solid rgba(255,255,255,0.35)
-                - border-radius: 14px
-                - padding: 8px
-                - height: 150px
-                - display: flex
-                - flex-direction: column
-                - justify-content: center
-                - align-items: center
-                - background: rgba(0,0,0,0.2)
-              grid:
-                - grid-template-areas: |
-                    "score score score"
-                    "l1 . l2"
-                    "s1 . s2"
-                    "n1 . n2"
-                - grid-template-columns: 1fr min-content 1fr
-                - grid-template-rows: auto auto auto auto
-              custom_fields:
-                score:
-                  - grid-area: score
-                  - font-size: 18px
-                  - font-weight: bold
-                  - color: white
-                  - text-align: center
-                  - margin-bottom: 4px
-                l1:
-                  - grid-area: l1
-                  - justify-self: center
-                l2:
-                  - grid-area: l2
-                  - justify-self: center
-                s1:
-                  - grid-area: s1
-                  - font-size: 13px
-                  - color: white
-                  - justify-self: center
-                s2:
-                  - grid-area: s2
-                  - font-size: 13px
-                  - color: white
-                  - justify-self: center
-                n1:
-                  - grid-area: n1
-                  - font-size: 14px
-                  - color: white
-                  - justify-self: center
-                  - white-space: normal
-                  - text-align: center
-                  - padding: 0 4px
-                n2:
-                  - grid-area: n2
-                  - font-size: 14px
-                  - color: white
-                  - justify-self: center
-                  - white-space: normal
-                  - text-align: center
-                  - padding: 0 4px
-          - type: custom:button-card
-            entity: sensor.playoffs_r1_east_3
-            show_icon: false
-            show_name: false
-            show_state: false
-            custom_fields:
-              score: |
-                [[[
-                  return states['sensor.playoffs_r1_east_3'].attributes.series_status;
-                ]]]
-              l1: |
-                [[[
-                  const logo = states['sensor.playoffs_r1_east_3'].attributes.team1_logo;
-                  return `<img src="${logo}" height="60">`;
-                ]]]
-              l2: |
-                [[[
-                  const logo = states['sensor.playoffs_r1_east_3'].attributes.team2_logo;
-                  return `<img src="${logo}" height="60">`;
-                ]]]
-              s1: |
-                [[[
-                  return states['sensor.playoffs_r1_east_3'].attributes.team1_seed;
-                ]]]
-              s2: |
-                [[[
-                  return states['sensor.playoffs_r1_east_3'].attributes.team2_seed;
-                ]]]
-              n1: |
-                [[[
-                  const full = states['sensor.playoffs_r1_east_3'].attributes.team1_name || "";
-                  const parts = full.trim().split(" ");
-                  return parts[parts.length - 1];
-                ]]]
-              n2: |
-                [[[
-                  const full = states['sensor.playoffs_r1_east_3'].attributes.team2_name || "";
-                  const parts = full.trim().split(" ");
-                  return parts[parts.length - 1];
-                ]]]
-            styles:
-              card:
-                - border: 1px solid rgba(255,255,255,0.35)
-                - border-radius: 14px
-                - padding: 8px
-                - height: 150px
-                - display: flex
-                - flex-direction: column
-                - justify-content: center
-                - align-items: center
-                - background: rgba(0,0,0,0.2)
-              grid:
-                - grid-template-areas: |
-                    "score score score"
-                    "l1 . l2"
-                    "s1 . s2"
-                    "n1 . n2"
-                - grid-template-columns: 1fr min-content 1fr
-                - grid-template-rows: auto auto auto auto
-              custom_fields:
-                score:
-                  - grid-area: score
-                  - font-size: 18px
-                  - font-weight: bold
-                  - color: white
-                  - text-align: center
-                  - margin-bottom: 4px
-                l1:
-                  - grid-area: l1
-                  - justify-self: center
-                l2:
-                  - grid-area: l2
-                  - justify-self: center
-                s1:
-                  - grid-area: s1
-                  - font-size: 13px
-                  - color: white
-                  - justify-self: center
-                s2:
-                  - grid-area: s2
-                  - font-size: 13px
-                  - color: white
-                  - justify-self: center
-                n1:
-                  - grid-area: n1
-                  - font-size: 14px
-                  - color: white
-                  - justify-self: center
-                  - white-space: normal
-                  - text-align: center
-                  - padding: 0 4px
-                n2:
-                  - grid-area: n2
-                  - font-size: 14px
-                  - color: white
-                  - justify-self: center
-                  - white-space: normal
-                  - text-align: center
-                  - padding: 0 4px
-          - type: custom:button-card
-            entity: sensor.playoffs_r1_east_4
-            show_icon: false
-            show_name: false
-            show_state: false
-            custom_fields:
-              score: |
-                [[[
-                  return states['sensor.playoffs_r1_east_4'].attributes.series_status;
-                ]]]
-              l1: |
-                [[[
-                  const logo = states['sensor.playoffs_r1_east_4'].attributes.team1_logo;
-                  return `<img src="${logo}" height="60">`;
-                ]]]
-              l2: |
-                [[[
-                  const logo = states['sensor.playoffs_r1_east_4'].attributes.team2_logo;
-                  return `<img src="${logo}" height="60">`;
-                ]]]
-              s1: |
-                [[[
-                  return states['sensor.playoffs_r1_east_4'].attributes.team1_seed;
-                ]]]
-              s2: |
-                [[[
-                  return states['sensor.playoffs_r1_east_4'].attributes.team2_seed;
-                ]]]
-              n1: |
-                [[[
-                  const full = states['sensor.playoffs_r1_east_4'].attributes.team1_name || "";
-                  const parts = full.trim().split(" ");
-                  return parts[parts.length - 1];
-                ]]]
-              n2: |
-                [[[
-                  const full = states['sensor.playoffs_r1_east_4'].attributes.team2_name || "";
-                  const parts = full.trim().split(" ");
-                  return parts[parts.length - 1];
-                ]]]
-            styles:
-              card:
-                - border: 1px solid rgba(255,255,255,0.35)
-                - border-radius: 14px
-                - padding: 8px
-                - height: 150px
-                - display: flex
-                - flex-direction: column
-                - justify-content: center
-                - align-items: center
-                - background: rgba(0,0,0,0.2)
-              grid:
-                - grid-template-areas: |
-                    "score score score"
-                    "l1 . l2"
-                    "s1 . s2"
-                    "n1 . n2"
-                - grid-template-columns: 1fr min-content 1fr
-                - grid-template-rows: auto auto auto auto
-              custom_fields:
-                score:
-                  - grid-area: score
-                  - font-size: 18px
-                  - font-weight: bold
-                  - color: white
-                  - text-align: center
-                  - margin-bottom: 4px
-                l1:
-                  - grid-area: l1
-                  - justify-self: center
-                l2:
-                  - grid-area: l2
-                  - justify-self: center
-                s1:
-                  - grid-area: s1
-                  - font-size: 13px
-                  - color: white
-                  - justify-self: center
-                s2:
-                  - grid-area: s2
-                  - font-size: 13px
-                  - color: white
-                  - justify-self: center
-                n1:
-                  - grid-area: n1
-                  - font-size: 14px
-                  - color: white
-                  - justify-self: center
-                  - white-space: normal
-                  - text-align: center
-                  - padding: 0 4px
-                n2:
-                  - grid-area: n2
-                  - font-size: 14px
-                  - color: white
-                  - justify-self: center
-                  - white-space: normal
-                  - text-align: center
-                  - padding: 0 4px
+            `;
+          }
+          return `
+            <div class="fade-rotator">
+              <div class="fade-item item1">${status}</div>
+              <div class="fade-item item2">${next}</div>
+            </div>
+          `;
+        ]]]
+  nhl_series_card:
+    template:
+      - nhl_next_game
+      - nhl_theme_series
+      - nhl_css
+    show_icon: false
+    show_name: false
+    show_state: false
+    custom_fields:
+      l1: |
+        [[[
+          return `<img src="${entity.attributes.team1_logo}" height="80">`;
+        ]]]
+      l2: |
+        [[[
+          return `<img src="${entity.attributes.team2_logo}" height="80">`;
+        ]]]
+      s1: |
+        [[[
+          return entity.attributes.team1_seed;
+        ]]]
+      s2: |
+        [[[
+          return entity.attributes.team2_seed;
+        ]]]
+      n1: |
+        [[[
+          const full = entity.attributes.team1_name || "";
+          return full.split(" ").pop();
+        ]]]
+      n2: |
+        [[[
+          const full = entity.attributes.team2_name || "";
+          return full.split(" ").pop();
+        ]]]
+    styles:
+      card:
+        - border-radius: 14px
+        - padding: 1vh
+        - display: flex
+        - flex-direction: column
+        - justify-content: center
+        - align-items: center
+        - background: rgba(0,0,0,0.2)
+      grid:
+        - grid-template-areas: |
+            "rotate rotate rotate"
+            "l1 . l2"
+            "s1 . s2"
+            "n1 . n2"
+        - grid-template-columns: 1fr min-content 1fr
+        - grid-template-rows: auto 1fr auto auto
+      custom_fields:
+        rotate:
+          - grid-area: rotate
+          - height: 2.8vh
+          - font-size: 2.2vh
+          - font-weight: bold
+          - color: white
+          - text-align: center
+          - margin-bottom: 0.5vh
+          - position: relative
+        l1:
+          - grid-area: l1
+          - justify-self: center
+          - align-self: center
+        l2:
+          - grid-area: l2
+          - justify-self: center
+          - align-self: center
+        s1:
+          - grid-area: s1
+          - font-size: 2vh
+          - color: white
+          - justify-self: center
+          - margin-top: 0.2vh
+        s2:
+          - grid-area: s2
+          - font-size: 2vh
+          - color: white
+          - justify-self: center
+          - margin-top: 0.2vh
+        n1:
+          - grid-area: n1
+          - font-size: 2vh
+          - color: white
+          - justify-self: center
+          - white-space: normal
+          - text-align: center
+          - padding: 0 0.5vh
+        n2:
+          - grid-area: n2
+          - font-size: 2vh
+          - color: white
+          - justify-self: center
+          - white-space: normal
+          - text-align: center
+          - padding: 0 0.5vh
+  nhl_live_card:
+    template:
+      - nhl_theme_live
+      - nhl_css
+    show_icon: false
+    show_name: false
+    show_state: false
+    custom_fields:
+      corner_home: ''
+      corner_away: ''
+      bg1: |
+        [[[
+          const logo = entity.attributes.away_logo;
+          return `<img src="${logo}" style="height:220px; opacity:0.07; filter:grayscale(100%);">`;
+        ]]]
+      bg2: |
+        [[[
+          const logo = entity.attributes.home_logo;
+          return `<img src="${logo}" style="height:220px; opacity:0.07; filter:grayscale(100%);">`;
+        ]]]
+      series: |
+        [[[
+          const a = states[entity.entity_id.replace("live", "series")].attributes;
+          const w1 = a.team1_wins;
+          const w2 = a.team2_wins;
+          const t1 = a.team1_abbrev;
+          const t2 = a.team2_abbrev;
+          if (w1 === 4 || w2 === 4) return w1 > w2 ? `${t1} wins ${w1}–${w2}` : `${t2} wins ${w2}–${w1}`;
+          if (w1 > w2) return `${t1} lead ${w1}–${w2}`;
+          if (w2 > w1) return `${t2} lead ${w2}–${w1}`;
+          return `Tied ${w1}–${w2}`;
+        ]]]
+      score: |
+        [[[
+          const a = entity.attributes;
+          return `${a.away_score} - ${a.home_score}`;
+        ]]]
+      status: |
+        [[[
+          const a = entity.attributes;
+          const state = (a.game_state || "").toUpperCase();
+          if (state === "PRE") return "Pre‑Game";
+          if (state === "OVER") return "End";
+          if (state === "FINAL") {
+            if (a.current_period > 3) return `Final/${a.current_period_ordinal}`;
+            return "Final";
+          }
+          if (a.is_intermission) {
+            return `${a.current_period_ordinal} INT • ${a.period_time_remaining}`;
+          }
+          return `${a.current_period_ordinal} • ${a.period_time_remaining}`;
+        ]]]
+      abbrev: |
+        [[[
+          const a = entity.attributes;
+          
+          const glowStyle = "background: rgba(255, 7, 58, 0.9); color: white; padding: 0.2vh 0.8vh; border-radius: 20px; font-weight: 900; box-shadow: 0 0 10px rgba(255, 7, 58, 0.8); text-shadow: 0 0 4px rgba(255, 255, 255, 0.5); display: inline-block; font-size: 2.2vh;";
+          
+          const awayText = a.away_en ? `<span style="${glowStyle}">${a.away_team} EN</span>` : a.away_team;
+          const homeText = a.home_en ? `<span style="${glowStyle}">${a.home_team} EN</span>` : a.home_team;
+          
+          // FIXED: Added a parent container div with an explicit height of 3vh and locked line-height
+          // This acts as a physical ceiling, blocking the EN capsule from pushing upward
+          return `
+            <div style="height: 3vh; line-height: 3vh; display: flex; align-items: center; width: 100%;">
+              <div style="display: grid; grid-template-columns: 1fr auto 1fr; width: 100%; align-items: center; justify-items: center; gap: 1vh;">
+                <div style="justify-self: end; text-align: right; width: 100%;">${awayText}</div>
+                <div style="color: rgba(255,255,255,0.6); font-weight: 500; font-size: 2.1vh;">vs</div>
+                <div style="justify-self: start; text-align: left; width: 100%;">${homeText}</div>
+              </div>
+            </div>
+          `;
+        ]]]
+    styles:
+      card:
+        - border-radius: 14px
+        - padding: 1vh
+        - display: flex
+        - flex-direction: column
+        - justify-content: center
+        - align-items: center
+      grid:
+        - grid-template-areas: |
+            "series series series"
+            "bg1 score bg2"
+            "bg1 status bg2"
+            "bg1 abbrev bg2"
+        - grid-template-columns: 1fr auto 1fr
+        - grid-template-rows: auto 1fr auto auto
+      custom_fields:
+        series:
+          - grid-area: series
+          - font-size: 2.0vh
+          - font-weight: bold
+          - text-align: center
+          - margin-bottom: 0.5vh
+          - z-index: 3
+          - color: white
+        bg1:
+          - position: absolute
+          - top: 50%
+          - left: 0
+          - transform: translate(-45%, -50%)
+          - pointer-events: none
+          - z-index: 1
+        bg2:
+          - position: absolute
+          - top: 50%
+          - right: 0
+          - transform: translate(45%, -50%)
+          - pointer-events: none
+          - z-index: 1
+        score:
+          - grid-area: score
+          - font-size: 5.2vh
+          - font-weight: bold
+          - text-align: center
+          - z-index: 2
+        status:
+          - grid-area: status
+          - font-size: 2.2vh
+          - text-align: center
+          - margin-top: '-0.8vh'
+          - z-index: 2
+        abbrev:
+          - grid-area: abbrev
+          - font-size: 2.2vh
+          - margin-top: 0.5vh
+          - z-index: 2
+          - width: 100%
+          - min-width: 140px
+  nhl_title_bar:
+    show_icon: false
+    show_name: true
+    show_state: false
+    styles:
+      card:
+        - background: none
+        - border: none
+        - box-shadow: none
+        - padding: 0
+        - height: 32px
+        - display: flex
+        - justify-content: center
+        - align-items: center
+      name:
+        - font-size: 20px
+        - font-weight: bold
+        - color: white
+        - text-align: center
+  round2_cf_grid:
+    variables:
+      side: west
+    styles:
+      card:
+        - background: none
+        - box-shadow: none
+        - border: none
+      grid:
+        - grid-template-columns: 1fr 1fr 1fr 1fr
+        - grid-template-rows: auto auto auto auto
+        - grid-template-areas: |
+            [[[
+              const sd = variables.side;
+              const isW = sd === 'west';
+              const w1_n = isW ? 'r2w1' : 'r2e1';
+              const w2_n = isW ? 'r2w2' : 'r2e2';
+              const t_n  = isW ? 'w_title' : 'e_title';
+              const f_n  = isW ? 'w_cf' : 'e_cf';
+
+              const w1_id = isW ? 'sensor.live_r2_west_1' : 'sensor.live_r2_east_1';
+              const w2_id = isW ? 'sensor.live_r2_west_2' : 'sensor.live_r2_east_2';
+              const f_id  = isW ? `sensor.live_${sd}_final` : `sensor.live_${sd}_final`;
+
+              const w1_live = states[w1_id]?.state === 'live';
+              const w2_live = states[w2_id]?.state === 'live';
+              const f_live  = states[f_id]?.state === 'live';
+
+              let row1 = w1_live ? `"${w1_n} ${w1_n} ${w1_n} ${w1_n}"` : isW ? `"${w1_n} ${w1_n} ${w1_n} ."` : `". ${w1_n} ${w1_n} ${w1_n}"`;
+              let row2 = `"${t_n} ${t_n} ${t_n} ${t_n}"`;
+              let row3 = f_live ? `"${f_n} ${f_n} ${f_n} ${f_n}"` : isW ? `". ${f_n} ${f_n} ${f_n}"` : `"${f_n} ${f_n} ${f_n} ."`;
+              let row4 = w2_live ? `"${w2_n} ${w2_n} ${w2_n} ${w2_n}"` : isW ? `"${w2_n} ${w2_n} ${w2_n} ."` : `". ${w2_n} ${w2_n} ${w2_n}"`;
+
+              return `${row1} ${row2} ${row3} ${row4}`;
+            ]]]
+  tournament_game_logic:
+    variables:
+      side: west
+      round: '2'
+      game_num: '1'
+    styles:
+      grid:
+        - grid-template-areas: '"main"'
+      card:
+        - padding: 0px
+    custom_fields:
+      main:
+        card:
+          type: custom:button-card
+          template: |
+            [[[ 
+              const sd = variables.side;
+              const rd = variables.round;
+              const num = variables.game_num;
+              const live_id = (rd === "final") ? "sensor.live_final" : (rd === "cf") ? `sensor.live_${sd}_final` : `sensor.live_r${rd}_${sd}_${num}`;
+              return (states[live_id]?.state === 'live') ? 'nhl_live_card' : 'nhl_series_card';
+            ]]]
+          entity: |
+            [[[ 
+              const sd = variables.side;
+              const rd = variables.round;
+              const num = variables.game_num;
+              const live_id = (rd === "final") ? "sensor.live_final" : (rd === "cf") ? `sensor.live_${sd}_final` : `sensor.live_r${rd}_${sd}_${num}`;
+              const series_id = (rd === "final") ? "sensor.series_final" : (rd === "cf") ? `sensor.series_${sd}_final` : `sensor.series_r${rd}_${sd}_${num}`;
+              return (states[live_id]?.state === 'live') ? live_id : series_id;
+            ]]]
+          variables:
+            round: |
+              [[[ return variables.round; ]]]
+            side: |
+              [[[ return variables.side; ]]]
+          extra_styles: |
+            @import url("/local/your-styles.css");
+  nhl_theme_live:
+    styles:
+      card:
+        - height: |
+            [[[ 
+              const rd = variables.round;
+              if (rd === "final") return "30vh";
+              if (rd === "cf") return "24vh";
+              if (rd === "2" || rd === "r2") return "20vh";
+              return "20vh"; // Default Fallback (Round 1)
+            ]]]
+        - background: >-
+            radial-gradient(circle, rgba(10,10,10,0.9) 0%, rgba(15,15,15,0.6)
+            50%, rgba(0,0,0,0.3) 100%)
+        - overflow: hidden
+        - border: |
+            [[[
+              const sd = variables.side;
+              const rd = variables.round;
+
+              // 1. DYNAMIC GOLD OVERRIDE FOR FINALS
+              if (rd === "final") return "rgba(255, 215, 0, 0.8) 2px solid";
+
+              const isW = sd === "west";
+              const west = "rgba(0,122,255,";
+              const east = "rgba(255,0,0,";
+              const base = isW ? west : east;
+              if (rd === "cf") return base + "0.9) 2px solid";
+              if (rd === "2" || rd === "r2") return base + "0.8) 2px solid";
+              return base + "0.7) 2px solid";
+            ]]]
+        - box-shadow: |
+            [[[
+              // 2. DYNAMIC GOLD GLOW OVERRIDE FOR FINALS
+              if (variables.round === "final") return "inset 0 0 20px 4px rgba(255, 215, 0, 0.55)";
+
+              const isW = variables.side === "west";
+              return isW ? "inset 0 0 20px 4px rgba(0,122,255,0.6)" : "inset 0 0 20px 4px rgba(255,0,0,0.6)";
+            ]]]
+      custom_fields:
+        corner_home:
+          - position: absolute
+          - top: 0
+          - right: 0
+          - z-index: 1
+          - width: 0px
+          - height: 0px
+          - background: transparent
+          - border-style: solid
+          - border-width: 0 40px 40px 0
+          - filter: |
+              [[[
+                const a = entity.attributes;
+                if (a.home_pp) return "drop-shadow(0 0 6px rgba(57,255,20,0.85))";
+                if (a.is_4_on_4 || a.away_pp) return "drop-shadow(0 0 6px rgba(255,255,51,0.85))";
+                return "none";
+              ]]]
+          - border-color: |
+              [[[
+                const a = entity.attributes;
+                if (a.is_4_on_4) return "rgba(255,255,0,0.8) rgba(255,255,0,0.8) transparent transparent";
+                if (a.home_pp) return "rgba(57,255,20,0.8) rgba(57,255,20,0.8) transparent transparent";
+                if (a.away_pp) {
+                  if (a.strength_home == 3) return "rgba(255,7,58,0.8) rgba(255,7,58,0.8) transparent transparent";
+                  return "rgba(255,255,51,0.8) rgba(255,255,51,0.8) transparent transparent";
+                }
+                if (a.strength_home == 3) return "rgba(255,7,58,0.8) rgba(255,7,58,0.8) transparent transparent";
+                if (a.strength_home == 4) return "rgba(255,255,51,0.8) rgba(255,255,51,0.8) transparent transparent";
+                return "transparent transparent transparent transparent";
+              ]]]
+        corner_away:
+          - position: absolute
+          - top: 0
+          - left: 0
+          - z-index: 1
+          - width: 0px
+          - height: 0px
+          - background: transparent
+          - border-style: solid
+          - border-width: 40px 40px 0 0
+          - filter: |
+              [[[
+                const a = entity.attributes;
+                if (a.away_pp) return "drop-shadow(0 0 6px rgba(57,255,20,0.85))";
+                if (a.is_4_on_4 || a.home_pp) return "drop-shadow(0 0 6px rgba(255,255,51,0.85))";
+                return "none";
+              ]]]
+          - border-color: |
+              [[[
+                const a = entity.attributes;
+                if (a.is_4_on_4) return "rgba(255,255,0,0.8) transparent transparent transparent";
+                if (a.away_pp) return "rgba(57,255,20,0.8) transparent transparent transparent";
+                if (a.home_pp) {
+                  if (a.strength_away == 3) return "rgba(255,7,58,0.8) transparent transparent transparent";
+                  return "rgba(255,255,51,0.8) transparent transparent transparent";
+                }
+                if (a.strength_away == 3) return "rgba(255,7,58,0.8) transparent transparent transparent";
+                if (a.strength_away == 4) return "rgba(255,255,51,0.8) transparent transparent transparent";
+                return "transparent transparent transparent transparent";
+              ]]]
+  nhl_theme_series:
+    styles:
+      card:
+        - height: |
+            [[[
+              const rd = variables.round;
+              if (rd === "final") return "30vh";
+              if (rd === "cf") return "24vh";
+              if (rd === "2" || rd === "r2") return "20vh";
+              return "20vh";
+            ]]]
+        - border: |
+            [[[
+              const sd = variables.side;
+              const rd = variables.round;
+
+              // 3. DYNAMIC GOLD OVERRIDE FOR FINALS SERIES CARD
+              if (rd === "final") return "rgba(255, 215, 0, 0.8) 2px solid";
+
+              const isW = sd === "west";
+              const west = "rgba(0,122,255,";
+              const east = "rgba(255,0,0,";
+              const base = isW ? west : east;
+              if (rd === "cf") return base + "0.8) 2px solid";
+              if (rd === "2" || rd === "r2") return base + "0.7) 2px solid";
+              return base + "0.6) 2px solid";
+            ]]]
+        - overflow: hidden
+        - animation: |
+            [[[
+              const rd = variables.round;
+              const isW = variables.side === "west";
+              const t = entity.attributes.next_game_time;
+              if (!t) return "none";
+              const d = new Date(t);
+              const today = new Date();
+              const isToday = d.getFullYear() === today.getFullYear() && d.getMonth() === today.getMonth() && d.getDate() === today.getDate();
+              
+              if (isToday) {
+                // 4. DYNAMIC GOLD GLOW OVERRIDE FOR FINALS MATCH GAME DAY
+                if (rd === "final") return "pulse-gold 1.6s ease-in-out infinite";
+                return isW ? "w_glow 1.6s ease-in-out infinite" : "e_glow 1.6s ease-in-out infinite";
+              }
+              return "none";
+            ]]]
+  nhl_css:
+    extra_styles: >
+      @keyframes fade1 { 
+        0%,10% { opacity: 1; } 
+        20%,60% { opacity: 0; } 
+        70%,100% { opacity: 1; } 
+      }
+
+      @keyframes fade2 { 
+        0%,10% { opacity: 0; } 
+        20%,60% { opacity: 1; } 
+        70%,100% { opacity: 0; } 
+      }
+
+      .fade-rotator { position: relative; height: 24px; }
+
+      .fade-item { position: absolute; width: 100%; height: 24px; line-height:
+      24px; left: 0; top: 0; }
+
+      .fade-item.item1 { animation: fade1 10s infinite; }
+
+      .fade-item.item2 { animation: fade2 10s infinite; }
+
+
+      @keyframes e_glow {
+        0% { box-shadow: inset 0 0 6px 1px rgba(255, 0, 0, 0.4); }
+        50% { box-shadow: inset 0 0 20px 4px rgba(255, 0, 0, 0.95); }
+        100% { box-shadow: inset 0 0 6px 1px rgba(255, 0, 0, 0.4); }
+      } @keyframes w_glow {
+        0% { box-shadow: inset 0 0 6px 1px rgba(0, 122, 255, 0.4); }
+        50% { box-shadow: inset 0 0 20px 4px rgba(0, 122, 255, 0.95); }
+        100% { box-shadow: inset 0 0 6px 1px rgba(0, 122, 255, 0.4); }
+      } @keyframes pulse-gold { 0% { box-shadow: inset 0 0 6px 1px rgba(255,
+      215, 0, 0.3); } 50% { box-shadow: inset 0 0 20px 4px rgba(255, 215, 0,
+      0.85); } 100% { box-shadow: inset 0 0 6px 1px rgba(255, 215, 0, 0.3); } }
 background:
   opacity: 33
-  alignment: center
+  alignment: bottom center
   size: contain
   repeat: no-repeat
   attachment: fixed
   image:
     media_content_id: https://assets.nhle.com/logos/playoffs/png/scp-20252026-cup.png
-    media_content_type: ""
+    media_content_type: ''
     metadata:
       navigateIds:
         - {}
-        - media_content_type: ""
+        - media_content_type: ''
           media_content_id: __MANUAL_ENTRY__
+views:
+  - panel: true
+    cards:
+      - type: grid
+        columns: 5
+        square: false
+        cards:
+          - type: vertical-stack
+            cards:
+              - type: custom:button-card
+                template: tournament_game_logic
+                variables:
+                  side: west
+                  round: '1'
+                  game_num: '1'
+              - type: custom:button-card
+                template: tournament_game_logic
+                variables:
+                  side: west
+                  round: '1'
+                  game_num: '2'
+              - type: custom:button-card
+                template: tournament_game_logic
+                variables:
+                  side: west
+                  round: '1'
+                  game_num: '3'
+              - type: custom:button-card
+                template: tournament_game_logic
+                variables:
+                  side: west
+                  round: '1'
+                  game_num: '4'
+          - type: vertical-stack
+            cards:
+              - type: button
+                name: Western Conference
+              - type: custom:button-card
+                template: round2_cf_grid
+                variables:
+                  side: west
+                custom_fields:
+                  r2w1:
+                    card:
+                      type: custom:button-card
+                      template: tournament_game_logic
+                      variables:
+                        side: west
+                        round: '2'
+                        game_num: '1'
+                  r2w2:
+                    card:
+                      type: custom:button-card
+                      template: tournament_game_logic
+                      variables:
+                        side: west
+                        round: '2'
+                        game_num: '2'
+                  w_title:
+                    card:
+                      type: custom:button-card
+                      template: nhl_title_bar
+                      name: WESTERN FINALS
+                  w_cf:
+                    card:
+                      type: custom:button-card
+                      template: tournament_game_logic
+                      variables:
+                        side: west
+                        round: cf
+          - type: vertical-stack
+            cards:
+              - type: custom:button-card
+                name: >
+                  <div style="display:flex; flex-direction:column;
+                  align-items:center; justify-content:center;">
+                    <div style="background: linear-gradient(180deg, #1a1a1a 0%, #000 100%); border: 2px solid rgba(255,215,0,0.4); border-radius: 14px; padding: 2vh 2vh; width: 100%; display:flex; flex-direction:column; align-items:center; box-shadow: 0 0 14px rgba(0,0,0,0.6);">
+                      <img src="https://assets.nhle.com/logos/playoffs/png/scp-20252026-cup.png" style="height: 20vh; max-height: 220px; margin-bottom: 1vh; object-fit: contain;">
+                      <div style="font-size: 2.6vh; font-weight: 900; letter-spacing: 1px; color: white; text-transform: uppercase; text-align: center; white-space: nowrap;">
+                        Stanley Cup Final
+                      </div>
+                      <div style="font-size: 2.8vh; font-weight: 800; color: #d4d4d4; margin-top: 0.5vh;">
+                        2026
+                      </div>
+                    </div>
+                  </div>
+                styles:
+                  card:
+                    - background: none
+                    - border: none
+                    - box-shadow: none
+                    - padding: 0
+                    - height: 35vh
+                    - display: flex
+                    - justify-content: center
+                    - align-items: center
+                  name:
+                    - justify-self: center
+                    - text-align: center
+                    - width: 100%
+              - type: custom:button-card
+                template: tournament_game_logic
+                variables:
+                  side: final
+                  round: final
+          - type: vertical-stack
+            cards:
+              - type: button
+                name: Eastern Conference
+              - type: custom:button-card
+                template: round2_cf_grid
+                variables:
+                  side: east
+                custom_fields:
+                  e_title:
+                    card:
+                      type: custom:button-card
+                      template: nhl_title_bar
+                      name: EASTERN FINALS
+                  r2e1:
+                    card:
+                      type: custom:button-card
+                      template: tournament_game_logic
+                      variables:
+                        side: east
+                        round: '2'
+                        game_num: '1'
+                  r2e2:
+                    card:
+                      type: custom:button-card
+                      template: tournament_game_logic
+                      variables:
+                        side: east
+                        round: '2'
+                        game_num: '2'
+                  e_cf:
+                    card:
+                      type: custom:button-card
+                      template: tournament_game_logic
+                      variables:
+                        side: east
+                        round: cf
+          - type: vertical-stack
+            cards:
+              - type: custom:button-card
+                template: tournament_game_logic
+                variables:
+                  side: east
+                  round: '1'
+                  game_num: '1'
+              - type: custom:button-card
+                template: tournament_game_logic
+                variables:
+                  side: east
+                  round: '1'
+                  game_num: '2'
+              - type: custom:button-card
+                template: tournament_game_logic
+                variables:
+                  side: east
+                  round: '1'
+                  game_num: '3'
+              - type: custom:button-card
+                template: tournament_game_logic
+                variables:
+                  side: east
+                  round: '1'
+                  game_num: '4'
+        title: NHL_New Test
