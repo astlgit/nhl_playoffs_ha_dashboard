@@ -304,9 +304,9 @@ button_card_templates:
               const t_n  = isW ? 'w_title' : 'e_title';
               const f_n  = isW ? 'w_cf' : 'e_cf';
 
-              const w1_id = isW ? 'sensor.live_r2_west_1' : 'sensor.live_r2_east_1';
-              const w2_id = isW ? 'sensor.live_r2_west_2' : 'sensor.live_r2_east_2';
-              const f_id  = isW ? `sensor.live_${sd}_final` : `sensor.live_${sd}_final`;
+              const w1_id = isW ? 'sensor.nhl_live_r2_west_1' : 'sensor.nhl_live_r2_east_1';
+              const w2_id = isW ? 'sensor.nhl_live_r2_west_2' : 'sensor.nhl_live_r2_east_2';
+              const f_id  = isW ? `sensor.nhl_live_${sd}_cf` : `sensor.nhl_live_${sd}_cf`;
 
               const w1_live = states[w1_id]?.state === 'live';
               const w2_live = states[w2_id]?.state === 'live';
@@ -338,7 +338,7 @@ button_card_templates:
               const sd = variables.side;
               const rd = variables.round;
               const num = variables.game_num;
-              const live_id = (rd === "final") ? "sensor.live_final" : (rd === "cf") ? `sensor.live_${sd}_final` : `sensor.live_r${rd}_${sd}_${num}`;
+              const live_id = (rd === "4") ? "sensor.nhl_live_r4_final" : (rd === "cf") ? `sensor.nhl_live_r3_${sd}_cf` : `sensor.nhl_live_r${rd}_${sd}_${num}`;
               return (states[live_id]?.state === 'live') ? 'nhl_live_card' : 'nhl_series_card';
             ]]]
           entity: |
@@ -346,8 +346,8 @@ button_card_templates:
               const sd = variables.side;
               const rd = variables.round;
               const num = variables.game_num;
-              const live_id = (rd === "final") ? "sensor.live_final" : (rd === "cf") ? `sensor.live_${sd}_final` : `sensor.live_r${rd}_${sd}_${num}`;
-              const series_id = (rd === "final") ? "sensor.series_final" : (rd === "cf") ? `sensor.series_${sd}_final` : `sensor.series_r${rd}_${sd}_${num}`;
+              const live_id = (rd === "4") ? "sensor.nhl_live_r4_final" : (rd === "cf") ? `sensor.nhl_live_r3_${sd}_cf` : `sensor.nhl_live_r${rd}_${sd}_${num}`;
+              const series_id = (rd === "4") ? "sensor.nhl_series_r4_final" : (rd === "cf") ? `sensor.nhl_series_r3_${sd}_cf` : `sensor.nhl_series_r${rd}_${sd}_${num}`;
               return (states[live_id]?.state === 'live') ? live_id : series_id;
             ]]]
           variables:
@@ -363,8 +363,8 @@ button_card_templates:
         - height: |
             [[[ 
               const rd = variables.round;
-              if (rd === "final") return "30vh";
-              if (rd === "cf") return "24vh";
+              if (rd === "4") return "30vh";
+              if (rd === "3") return "24vh";
               if (rd === "2" || rd === "r2") return "20vh";
               return "20vh"; // Default Fallback (Round 1)
             ]]]
@@ -378,7 +378,7 @@ button_card_templates:
               const rd = variables.round;
 
               // 1. DYNAMIC GOLD OVERRIDE FOR FINALS
-              if (rd === "final") return "rgba(255, 215, 0, 0.8) 2px solid";
+              if (rd === "4") return "rgba(255, 215, 0, 0.8) 2px solid";
 
               const isW = sd === "west";
               const west = "rgba(0,122,255,";
@@ -391,7 +391,7 @@ button_card_templates:
         - box-shadow: |
             [[[
               // 2. DYNAMIC GOLD GLOW OVERRIDE FOR FINALS
-              if (variables.round === "final") return "inset 0 0 20px 4px rgba(255, 215, 0, 0.55)";
+              if (variables.round === "4") return "inset 0 0 20px 4px rgba(255, 215, 0, 0.55)";
 
               const isW = variables.side === "west";
               return isW ? "inset 0 0 20px 4px rgba(0,122,255,0.6)" : "inset 0 0 20px 4px rgba(255,0,0,0.6)";
@@ -463,7 +463,7 @@ button_card_templates:
         - height: |
             [[[
               const rd = variables.round;
-              if (rd === "final") return "30vh";
+              if (rd === "4") return "30vh";
               if (rd === "cf") return "24vh";
               if (rd === "2" || rd === "r2") return "20vh";
               return "20vh";
@@ -474,7 +474,7 @@ button_card_templates:
               const rd = variables.round;
 
               // 3. DYNAMIC GOLD OVERRIDE FOR FINALS SERIES CARD
-              if (rd === "final") return "rgba(255, 215, 0, 0.8) 2px solid";
+              if (rd === "4") return "rgba(255, 215, 0, 0.8) 2px solid";
 
               const isW = sd === "west";
               const west = "rgba(0,122,255,";
@@ -497,7 +497,7 @@ button_card_templates:
               
               if (isToday) {
                 // 4. DYNAMIC GOLD GLOW OVERRIDE FOR FINALS MATCH GAME DAY
-                if (rd === "final") return "pulse-gold 1.6s ease-in-out infinite";
+                if (rd === "4") return "pulse-gold 1.6s ease-in-out infinite";
                 return isW ? "w_glow 1.6s ease-in-out infinite" : "e_glow 1.6s ease-in-out infinite";
               }
               return "none";
@@ -546,11 +546,6 @@ background:
   image:
     media_content_id: https://assets.nhle.com/logos/playoffs/png/scp-20252026-cup.png
     media_content_type: ''
-    metadata:
-      navigateIds:
-        - {}
-        - media_content_type: ''
-          media_content_id: __MANUAL_ENTRY__
 views:
   - panel: true
     cards:
@@ -586,8 +581,26 @@ views:
                   game_num: '4'
           - type: vertical-stack
             cards:
-              - type: button
-                name: Western Conference
+              - type: custom:button-card
+                name: WESTERN CONFERENCE
+                show_icon: false
+                show_state: false
+                styles:
+                  card:
+                    - background: 'linear-gradient(180deg, #003B73 0%, #00264D 100%)'
+                    - border: 2px solid rgba(0,122,255,0.6)
+                    - border-radius: 14px
+                    - padding: 10px
+                    - height: 40px
+                    - display: flex
+                    - justify-content: center
+                    - align-items: center
+                  name:
+                    - font-size: 22px
+                    - font-weight: 900
+                    - color: white
+                    - text-align: center
+                    - letter-spacing: 1px
               - type: custom:button-card
                 template: round2_cf_grid
                 variables:
@@ -620,7 +633,8 @@ views:
                       template: tournament_game_logic
                       variables:
                         side: west
-                        round: cf
+                        round: '3'
+                        game_num: cf
           - type: vertical-stack
             cards:
               - type: custom:button-card
@@ -655,11 +669,29 @@ views:
                 template: tournament_game_logic
                 variables:
                   side: final
-                  round: final
+                  round: '4'
           - type: vertical-stack
             cards:
-              - type: button
-                name: Eastern Conference
+              - type: custom:button-card
+                name: EASTERN CONFERENCE
+                show_icon: false
+                show_state: false
+                styles:
+                  card:
+                    - background: 'linear-gradient(180deg, #7A0000 0%, #4A0000 100%)'
+                    - border: 2px solid rgba(200,0,0,0.6)
+                    - border-radius: 14px
+                    - padding: 10px
+                    - height: 40px
+                    - display: flex
+                    - justify-content: center
+                    - align-items: center
+                  name:
+                    - font-size: 22px
+                    - font-weight: 900
+                    - color: white
+                    - text-align: center
+                    - letter-spacing: 1px
               - type: custom:button-card
                 template: round2_cf_grid
                 variables:
@@ -692,7 +724,8 @@ views:
                       template: tournament_game_logic
                       variables:
                         side: east
-                        round: cf
+                        round: '3'
+                        game_num: cf
           - type: vertical-stack
             cards:
               - type: custom:button-card
@@ -719,4 +752,3 @@ views:
                   side: east
                   round: '1'
                   game_num: '4'
-        title: NHL_New Test
