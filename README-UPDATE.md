@@ -59,17 +59,6 @@ These headers visually separate the two sides of the bracket and align with NHL 
 
 ---
 
-## 🏆 Season‑Aware Banner (New!)  
-A dynamic banner is now displayed at the top of the dashboard:
-
-```
-https://assets.nhle.com/logos/playoffs/png/scp-{YYYYYYYY}-horizontal-banner-en.png
-```
-
-The `{YYYYYYYY}` season code updates automatically based on the season selected in the integration.
-
----
-
 ## 🧩 Integration Enhancements  
 Several backend improvements were made to support the new live overlay system:
 
@@ -95,7 +84,6 @@ Several backend improvements were made to support the new live overlay system:
 ## 🎨 Dashboard Layout Improvements  
 The dashboard now includes:
 
-- Season banner  
 - Western & Eastern conference title bars  
 - Updated series cards  
 - Live game overlays  
