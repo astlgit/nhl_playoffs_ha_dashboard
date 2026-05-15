@@ -3,7 +3,7 @@ from typing import Optional, Dict, Any
 
 from .mapping_bracket import SERIES_MAP  # reuse the same static map
 
-# Reverse lookup: "A" → "r1_east_1"
+# Reverse lookup: "A" → "r1_e1"
 LETTER_TO_SERIES_KEY = {
     meta["series_letter"]: key for key, meta in SERIES_MAP.items()
 }

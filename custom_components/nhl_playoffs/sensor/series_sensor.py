@@ -7,17 +7,65 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
+from homeassistant.helpers import entity_registry as er
 
 from ..const import DOMAIN, SERIES_COORDINATOR
 from ..series_coordinator import SeriesCoordinator
 from ..utils.mapping_bracket import SERIES_MAP
 
 
+# ---------------------------------------------------------
+# MIGRATION CLEANUP — remove ALL old series sensors
+# ---------------------------------------------------------
+async def _cleanup_old_entities(hass: HomeAssistant):
+    registry = er.async_get(hass)
+
+    OLD_ENTITY_PREFIXES = [
+        "sensor.series_",
+        "sensor.playoffs_",
+        "sensor.live_",
+        "sensor.nhl_series_",
+        "sensor.nhl_live_",
+        "sensor.series_final",
+        "sensor.live_final",
+        "sensor.nhl_series_final",
+        "sensor.nhl_live_final",
+    ]
+
+    OLD_UNIQUE_PREFIXES = [
+        "series_",
+        "live_",
+        "nhl_series_",
+        "nhl_live_",
+        f"{DOMAIN}_series_",
+        f"{DOMAIN}_live_",
+        f"{DOMAIN}_",
+    ]
+
+    for entity_id, entity in list(registry.entities.items()):
+        if entity.platform != DOMAIN:
+            continue
+
+        if any(entity_id.startswith(prefix) for prefix in OLD_ENTITY_PREFIXES):
+            registry.async_remove(entity_id)
+            continue
+
+        if any(entity.unique_id.startswith(prefix) for prefix in OLD_UNIQUE_PREFIXES):
+            registry.async_remove(entity_id)
+            continue
+
+
+# ---------------------------------------------------------
+# SETUP ENTRY
+# ---------------------------------------------------------
 async def async_setup_entry(
     hass: HomeAssistant,
     entry: ConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
+
+    await _cleanup_old_entities(hass)
+
     series_coordinator: SeriesCoordinator = hass.data[DOMAIN][entry.entry_id][SERIES_COORDINATOR]
 
     entities: list[SeriesSensor] = []
@@ -26,7 +74,7 @@ async def async_setup_entry(
         entities.append(
             SeriesSensor(
                 coordinator=series_coordinator,
-                series_key=key,
+                series_key=key,   # <-- now matches r1_west_1, r3_east_cf, r4_final, etc.
                 meta=meta,
             )
         )
@@ -34,9 +82,10 @@ async def async_setup_entry(
     async_add_entities(entities)
 
 
+# ---------------------------------------------------------
+# SERIES SENSOR CLASS
+# ---------------------------------------------------------
 class SeriesSensor(CoordinatorEntity, SensorEntity):
-    """Playoff series sensor using the new SeriesCoordinator."""
-
     _attr_icon = "mdi:hockey-sticks"
 
     def __init__(self, coordinator: SeriesCoordinator, series_key: str, meta: dict[str, Any]) -> None:
@@ -45,10 +94,10 @@ class SeriesSensor(CoordinatorEntity, SensorEntity):
         self._series_key = series_key
         self._meta = meta
 
-        # REQUIRED: match your working naming pattern
-        self._attr_unique_id = f"{DOMAIN}_series_{series_key}"
-        self.entity_id = f"sensor.series_{series_key}"
-        self._attr_name = meta["name"]
+        # FINAL NAMING — nhl_series_{series_key}
+        # Example: nhl_series_r1_west_1
+        self._attr_unique_id = f"nhl_series_{series_key}"
+        self._attr_name = f"NHL Series {series_key.upper()}"
 
     @property
     def extra_state_attributes(self) -> dict[str, Any]:
@@ -63,9 +112,6 @@ class SeriesSensor(CoordinatorEntity, SensorEntity):
 
         attrs: dict[str, Any] = {}
 
-        # ---------------------------------------------------------
-        # TEAM + SERIES DATA
-        # ---------------------------------------------------------
         team1 = bracket.get("topSeedTeam") or {}
         team2 = bracket.get("bottomSeedTeam") or {}
 
@@ -88,9 +134,6 @@ class SeriesSensor(CoordinatorEntity, SensorEntity):
         attrs["round"] = self._meta["round"]
         attrs["conference"] = self._meta["conference"]
 
-        # ---------------------------------------------------------
-        # SERIES STATUS
-        # ---------------------------------------------------------
         a1 = attrs["team1_abbrev"]
         a2 = attrs["team2_abbrev"]
         w1 = attrs["team1_wins"]
@@ -111,13 +154,9 @@ class SeriesSensor(CoordinatorEntity, SensorEntity):
             else:
                 attrs["series_status"] = f"{a2} wins {w2}-{w1}"
 
-        # ---------------------------------------------------------
-        # GAMES LIST (from series_details)
-        # ---------------------------------------------------------
         games = details.get("games", []) or []
-
-        games_list: list[dict[str, Any]] = []
-        games_dict: dict[str, Any] = {}
+        games_list = []
+        games_dict = {}
 
         for g in games:
             game_id = g.get("id")
@@ -141,9 +180,6 @@ class SeriesSensor(CoordinatorEntity, SensorEntity):
         attrs["games_list"] = games_list
         attrs["games_dict"] = games_dict
 
-        # ---------------------------------------------------------
-        # NEXT GAME
-        # ---------------------------------------------------------
         if next_game:
             attrs["next_game_pk"] = next_game.get("game_pk")
             attrs["next_game_time"] = next_game.get("start_time")
@@ -157,9 +193,6 @@ class SeriesSensor(CoordinatorEntity, SensorEntity):
             attrs["next_game_away"] = None
             attrs["next_game_number"] = None
 
-        # ---------------------------------------------------------
-        # TODAY GAME PK (critical for LiveCoordinator)
-        # ---------------------------------------------------------
         attrs["today_game_pk"] = today_game_pk
 
         return attrs
