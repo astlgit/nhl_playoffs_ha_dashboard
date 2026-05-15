@@ -35,9 +35,11 @@ This brings real‑time, broadcast‑style information directly into the bracket
 ## 🖼️ New Screenshots  
 Two new images have been added to the repository to showcase the live game overlay:
 
-1. **Live Game — Power Play Active (PP Triangle)**  
-2. **Live Game — Empty Net + Score + Period + Time Remaining**
-   ![Live Preview Card](images/Live_Preview_Card.png)
+1. **Live Game — Power Play Active (PP Triangle)**
+2. **Live Game — Green = Team on PP, Yellow = 4 players, Red = 3 Players**
+3. **Live Game — Empty Net + Score + Period + Time Remaining**
+
+![Live Preview Card](images/Live_Preview_Card.png)
 
 These demonstrate the new real‑time interface in action.
 
@@ -92,6 +94,8 @@ The dashboard now includes:
 - Improved readability  
 
 These changes make the dashboard feel more like a real NHL broadcast.
+
+![New Bracket Screenshot](images/New_Bracket_2026.png)
 
 ---
 
