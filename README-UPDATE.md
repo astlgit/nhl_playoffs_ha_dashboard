@@ -37,6 +37,7 @@ Two new images have been added to the repository to showcase the live game overl
 
 1. **Live Game — Power Play Active (PP Triangle)**  
 2. **Live Game — Empty Net + Score + Period + Time Remaining**
+   ![Live Preview Card](images/Live_Preview_Card.png)
 
 These demonstrate the new real‑time interface in action.
 
