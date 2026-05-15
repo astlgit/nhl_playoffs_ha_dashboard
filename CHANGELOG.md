@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 This project follows a simplified semantic versioning style.
 
 
-### ❗ REQUIRED ACTIONS BEFORE UPDATING  
+### ❗❗❗ REQUIRED ACTIONS BEFORE UPDATING  ❗❗❗
 To avoid **conflicting sensor names**, **duplicate entities**, or **broken dashboards**, you MUST do the following before installing this update:
 
 #### 1. **Delete the existing NHL Playoffs integration**
