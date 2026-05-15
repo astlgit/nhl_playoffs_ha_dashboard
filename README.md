@@ -1,193 +1,214 @@
-# NHL Playoffs Dashboard
+# 🏒 NHL Playoffs Dashboard  
+Home Assistant custom integration and Lovelace dashboard for NHL Stanley Cup Playoff tracking — now fully rebuilt with live game overlays, new sensors, and a modern bracket layout.
 
-Home Assistant custom integration and Lovelace dashboard for NHL playoff tracking.
+---
 
-## What it contains
+> ## 🆕 What’s New in v2.3.0
+> Major update released!  
+> - New live game overlay (PP, EN, score, period, time remaining)  
+> - New sensor naming format (`sensor.nhl_series_*`, `sensor.nhl_live_*`)  
+> - New season banner + conference bars  
+> - Dashboard fully rebuilt and optimized  
+> - `layout-card` no longer required  
+>
+> 📌 **Important:** You must delete the old integration + old dashboard YAML before installing this update.  
+>
+> 👉 Full update notes: [`README-UPDATE.md`](README-UPDATE.md)
 
-- `custom_components/nhl_playoffs/` — Home Assistant integration files
-- `lovelace/nhl_playoffs_dashboard.yaml` — Lovelace dashboard configuration
-- `www/nhl/` — Local images folder (contains `tbd.png` placeholder and setup instructions)
-- `images/` — Screenshots for documentation
-- `hacs.json` — HACS repository metadata
+---
 
-## Installation
+# 📦 Repository Contents
 
-### Manual install
+- `custom_components/nhl_playoffs/` — Home Assistant integration  
+- `lovelace/nhl_playoffs_dashboard.yaml` — Updated Lovelace dashboard  
+- `www/nhl/` — Local images folder (includes `tbd.png`)  
+- `images/` — Screenshots for documentation  
+- `hacs.json` — HACS metadata  
 
-1. Copy the full `custom_components/nhl_playoffs/` folder into your Home Assistant `config/custom_components/` directory.
+---
+
+# ⚙️ Installation
+
+## 🔧 Manual Install
+1. Copy `custom_components/nhl_playoffs/` into:
+   ```
+   config/custom_components/
+   ```
 2. Restart Home Assistant.
-3. Install the required Lovelace custom cards:
-   - `button-card`
-   - `layout-card`
-4. Open Home Assistant and add the `NHL Playoffs` integration from the Integrations page.
-5. Use the dashboard YAML in `lovelace/nhl_playoffs_dashboard.yaml` to create or update your Lovelace view.
+3. Install required Lovelace custom card:
+   - `button-card`  
+4. Add the **NHL Playoffs** integration in Home Assistant.
+5. Use the updated dashboard YAML in:
+   ```
+   lovelace/nhl_playoffs_dashboard.yaml
+   ```
 
-### HACS install
+## 🧩 HACS Install
+1. In HACS → Integrations → Custom Repositories  
+2. Add:
+   ```
+   https://github.com/astlgit/nhl_playoffs_ha_dashboard
+   ```
+3. Install **NHL Playoffs Dashboard**  
+4. Install `button-card` (layout-card no longer required)  
+5. Restart Home Assistant  
 
-[![Open your Home Assistant instance and add this repository to HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=astlgit&repository=nhl_playoffs_ha_dashboard)
+---
 
-1. In HACS, go to `Integrations` > `Custom repositories`.
-2. Add this repository as a custom integration repository.
-3. Install the `NHL Playoffs Dashboard` integration from HACS.
-4. Install the required Lovelace cards from HACS:
-   - `button-card`
-   - `layout-card`
-5. Restart Home Assistant after installation.
+# 🖼️ Screenshots
 
-[![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=astlgit&repository=nhl_playoffs_ha_dashboard)
+### Live Game — Power Play Active  
 
+### Live Game — Empty Net + Score + Period + Time Remaining  
+![Live Card](images/Live_Preview_Card.png)
 
-> `lovelace/nhl_playoffs_dashboard.yaml` includes the required resource references for these custom cards.
+### Partial Season View (2026) (UPDATED) 
+![Partial Season 2026](images/New_Bracket_2026.png)
 
-## Screenshots
-
-### Full Season View (2024)
-
-![Full Season 2024](images/Full%20Season%202024.png)
-
-*Complete playoff bracket for the 2023-2024 NHL season showing all rounds and teams.*
-
-### Integration Setup
-
+### Integration Setup  
 ![Integration API](images/Intergration%20api.png)
 
-*Home Assistant integration configuration screen for setting up the NHL Playoffs integration.*
+### Full Season View (2024)  
+![Full Season 2024](images/Full%20Season%202024.png)
 
-### Partial Season View (2026)
 
-![Partial Season 2026](images/Partial%20Season%202026.png)
+---
 
-*Dashboard view showing current playoff progress for the 2025-2026 season.*
+# 🧩 Integration Setup
 
-## Dashboard Installation
+After installation:
 
-### Prerequisites
+1. Go to **Settings → Devices & Services → Integrations**  
+2. Add **NHL Playoffs**  
+3. Select your season (auto or manual)  
+4. Integration creates:
+   - Series sensors  
+   - Live game sensors  
+   - Season metadata  
 
-Before adding the dashboard, ensure you have:
-1. Installed the required Lovelace custom cards (`button-card` and `layout-card`)
-2. Set up the TBD placeholder image in `config/www/nhl/tbd.png`
-3. Configured the NHL Playoffs integration
+---
 
-### Method 1: YAML Configuration (Legacy)
+# 📡 Sensor Naming (Updated)
 
-If you're using YAML mode for Lovelace dashboards:
+## Series Sensors  
+```
+sensor.nhl_series_r1_east_1
+sensor.nhl_series_r1_west_1
+sensor.nhl_series_r2_east_1
+sensor.nhl_series_r2_west_1
+sensor.nhl_series_r3_east
+sensor.nhl_series_r3_west
+sensor.nhl_series_r4_final
+```
 
-1. **Enable YAML mode** in your `configuration.yaml`:
+## Live Game Sensors  
+```
+sensor.nhl_live_r1_east_1
+sensor.nhl_live_r1_west_1
+sensor.nhl_live_r2_east_1
+sensor.nhl_live_r2_west_1
+sensor.nhl_live_r3_east
+sensor.nhl_live_r3_west
+sensor.nhl_live_r4_final
+```
+
+## Live Attributes  
+- `home_team`, `away_team`  
+- `home_score`, `away_score`  
+- `live_period`  
+- `live_time_remaining`  
+- `live_intermission`  
+- `live_pp_team`  
+- `live_empty_net_team`  
+- `game_state`  
+
+---
+
+# 🖥️ Dashboard Installation
+
+## Prerequisites
+Before adding the dashboard, ensure:
+- `button-card` is installed  
+- `config/www/nhl/tbd.png` exists  
+- The NHL Playoffs integration is configured  
+
+## Method 1: YAML Mode (Legacy)
+If using YAML mode:
+
+1. Enable YAML mode:
    ```yaml
    lovelace:
      mode: yaml
    ```
+2. Add the dashboard YAML to your Lovelace config.
+3. Remove `panel: true` if adding to an existing view.
+4. Restart Home Assistant.
 
-2. **Create or edit your dashboard YAML file**. If you have a separate dashboard file (e.g., `ui-lovelace.yaml`), add the NHL playoffs dashboard:
-
-   ```yaml
-   title: NHL Playoffs Dashboard
-   views:
-     - title: Stanley Cup Playoffs
-       path: playoffs
-       cards:
-         # Copy the entire contents of lovelace/nhl_playoffs_dashboard.yaml here
-         # Remove the 'panel: true' line when pasting into a view
+## Method 2: UI Dashboard Editor (Recommended)
+1. Create a new dashboard in **Settings → Dashboards**  
+2. Open **Raw Configuration Editor**  
+3. Paste the contents of:
    ```
+   lovelace/nhl_playoffs_dashboard.yaml
+   ```
+4. Save and exit.
 
-3. **Copy the dashboard content**:
-   - Open `lovelace/nhl_playoffs_dashboard.yaml` from this repository
-   - Copy everything under the `cards:` section
-   - Paste it into your dashboard YAML under the `cards:` key
-   - Remove the `panel: true` line since you're adding it to a view, not creating a panel
+---
 
-4. **Restart Home Assistant** to apply the changes.
+# 🧱 Dashboard Layout (Updated)
 
-### Method 2: UI Dashboard Editor (Recommended)
+The dashboard uses a **5‑column bracket layout**:
 
-For the modern UI dashboard approach:
+- Columns 1–2 → Western Conference  
+- Column 3 → Conference Finals  
+- Columns 4–5 → Eastern Conference  
 
-1. **Go to your Home Assistant dashboard** and click the three dots (⋮) in the top right.
+At the top:
+- ~~Season banner~~  
+- Western Conference bar  
+- Eastern Conference bar  
 
-2. **Create a new dashboard**:
-   - Go to **Settings** > **Dashboards** > **Add Dashboard**
-   - Enter **"NHL Playoffs Dashboard"** as the dashboard title
-   - Select **"Show in sidebar"** if desired
-   - Click **"Create"**
+Each series card includes:
+- Team logos  
+- Team names  
+- Series wins  
+- Game list  
+- **Live game overlay**  
 
-3. **Open the Raw Configuration Editor**:
-   - Once created, go back to the dashboard list
-   - Click the three dots (⋮) next to your new dashboard > **"Raw configuration editor"**
+---
 
-4. **Add the dashboard configuration**:
-   - Copy the entire contents of `lovelace/nhl_playoffs_dashboard.yaml`
-   - Paste it into the raw editor
-   - The YAML includes the dashboard title and view configuration
+# 🛠 Development Notes
 
-5. **Save and exit** the editor.
+### Mapping  
+`mapping_bracket.py` maps:
+- Series letters A–O  
+- Rounds  
+- Conferences  
+- Finals  
 
-**Alternative: Edit existing dashboard**
-- If you prefer to add the playoffs view to an existing dashboard:
-- Open the existing dashboard > three dots (⋮) > **"Raw configuration editor"**
-- Modify the YAML to add the playoffs view alongside existing views
-- Remove `panel: true` from the pasted YAML when adding to an existing dashboard
+### Coordinators  
+- `series_coordinator.py` → static series data  
+- `live_coordinator.py` → real‑time game updates  
 
-### Tips
+### Assets  
+Team logos + banners pulled from NHL CDN.
 
-- **Panel vs View**: The provided YAML uses `panel: true` for a full-screen experience. If adding to an existing dashboard, remove `panel: true` and paste under a `views:` entry.
-- **Custom Cards**: Ensure `button-card` and `layout-card` are installed before adding the dashboard.
-- **TBD Image**: The dashboard references `/local/nhl/tbd.png` for undetermined teams.
-- **Sensor Entities**: The dashboard expects sensors with names like `sensor.playoffs_r1_west_1`, etc.
+---
 
-## Required Lovelace resources
-
-If you are using the dashboard YAML directly, make sure the following resources are available in Home Assistant:
-
-- `button-card`: `/hacsfiles/button-card/button-card.js`
-- `layout-card`: `/hacsfiles/layout-card/layout-card.js`
-
-If you install the cards through HACS, these URLs will be added automatically.
-
-## Usage
-
-### Configuration
-
-1. After installation, go to **Settings** > **Devices & Services** > **Integrations**.
-2. Click **Create Integration** and select **NHL Playoffs**.
-3. In the config flow, choose your season mode:
-   - **Current season (auto-detect)**: Fetches data for the current year automatically.
-   - **Manual season (override)**: Select a specific year to display past playoffs (e.g., `20232024` for the 2023-2024 season).
-4. Complete the setup.
-
-### Dashboard
-
-- The dashboard YAML is a starter page for the Stanley Cup playoffs bracket display.
-- It expects sensor entities named `sensor.playoffs_r1_west_*`, `sensor.playoffs_r2_west_*`, etc.
-
-## Notes
-
-- The custom component currently includes the basic integration structure and sensor platform wiring.
-- The dashboard requires these Lovelace custom cards:
-  - `button-card`
-  - `layout-card`
-- **TBD Placeholder Image**: When teams aren't determined yet, the dashboard shows `/local/nhl/tbd.png`. You need to add this image file to your Home Assistant `config/www/nhl/tbd.png` folder.
-- Add your NHL API and data-fetching logic inside `custom_components/nhl_playoffs/coordinator/` and `custom_components/nhl_playoffs/sensors/`.
-- Keep `manifest.json` and `hacs.json` updated with any dependency or metadata changes.
-
-## Future Improvements (TODO)
-
-### Current Flaws
-- **Static year display**: Cup logo and year labels are hardcoded to show "2026" regardless of selected season
-- **Title responsiveness**: Dashboard title may not fit properly on screens smaller than 10 inches
+# 🚧 Future Improvements
 
 ### Planned Features
-- **Interactive button cards**: Make playoff round cards clickable to show current/future game details, live scores, and series statistics
-- **Dynamic logo updates**: Automatically change the Stanley Cup logo to match the selected season year (current or past)
-- **YAML optimization**: Refactor dashboard configuration to use reusable templates and reduce file size
-- **Mobile optimization**: Improve responsive design for tablets and phones
-- **Enhanced sensor data**: Add game times, venues, player stats, and injury reports to sensor attributes
-- **Error handling**: Better fallback displays when API data is unavailable or incomplete
-- **Localization**: Add multi-language support for international users
-- **Performance improvements**: Optimize data fetching and reduce dashboard load times
-- **Series progress indicators**: Add visual progress bars showing wins needed for advancement
-- **Game notifications**: Optional notifications for game starts, goals, and series conclusions
+- Dynamic Finals banner  
+- Conference shield logos  
+- Compact layout option  
+- Game Center modal  
+- Multi‑season selector  
+- Automatic dark/light mode  
 
-## License
+---
+
+# 📜 License  
+MIT License — see full text below.
 
 This project is licensed under the **MIT License**. See the terms below:
 
@@ -196,3 +217,4 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+

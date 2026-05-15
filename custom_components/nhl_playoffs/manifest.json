@@ -1,7 +1,7 @@
 {
   "domain": "nhl_playoffs",
   "name": "NHL Playoffs Dashboard Integration",
-  "version": "1.0.1",
+  "version": "2.3.0",
   "documentation": "https://github.com/astlgit/nhl_playoffs_ha_dashboard",
   "requirements": ["aiohttp>=3.9.0"],
   "dependencies": [],
@@ -9,6 +9,6 @@
   "config_flow": true,
   "iot_class": "cloud_polling",
   "loggers": ["custom_components.nhl_playoffs"],
-  "icon": "hockey_icon.png",
-  "logo": "hockey_icon.png"
+  "integration_type": "hub",
+  "platforms": ["sensor"]
 }
