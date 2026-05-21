@@ -306,7 +306,7 @@ button_card_templates:
 
               const w1_id = isW ? 'sensor.nhl_live_r2_west_1' : 'sensor.nhl_live_r2_east_1';
               const w2_id = isW ? 'sensor.nhl_live_r2_west_2' : 'sensor.nhl_live_r2_east_2';
-              const f_id  = isW ? `sensor.nhl_live_${sd}_cf` : `sensor.nhl_live_${sd}_cf`;
+              const f_id  = isW ? `sensor.nhl_live_r3_west_cf` : `sensor.nhl_live_r3_east_cf`;
 
               const w1_live = states[w1_id]?.state === 'live';
               const w2_live = states[w2_id]?.state === 'live';
@@ -338,7 +338,7 @@ button_card_templates:
               const sd = variables.side;
               const rd = variables.round;
               const num = variables.game_num;
-              const live_id = (rd === "4") ? "sensor.nhl_live_r4_final" : (rd === "cf") ? `sensor.nhl_live_r3_${sd}_cf` : `sensor.nhl_live_r${rd}_${sd}_${num}`;
+              const live_id = (rd === "4") ? "sensor.nhl_live_r4_final" : `sensor.nhl_live_r${rd}_${sd}_${num}`;
               return (states[live_id]?.state === 'live') ? 'nhl_live_card' : 'nhl_series_card';
             ]]]
           entity: |
@@ -346,8 +346,8 @@ button_card_templates:
               const sd = variables.side;
               const rd = variables.round;
               const num = variables.game_num;
-              const live_id = (rd === "4") ? "sensor.nhl_live_r4_final" : (rd === "cf") ? `sensor.nhl_live_r3_${sd}_cf` : `sensor.nhl_live_r${rd}_${sd}_${num}`;
-              const series_id = (rd === "4") ? "sensor.nhl_series_r4_final" : (rd === "cf") ? `sensor.nhl_series_r3_${sd}_cf` : `sensor.nhl_series_r${rd}_${sd}_${num}`;
+              const live_id = (rd === "4") ? "sensor.nhl_live_r4_final" : `sensor.nhl_live_r${rd}_${sd}_${num}`;
+              const series_id = (rd === "4") ? "sensor.nhl_series_r4_final" : `sensor.nhl_series_r${rd}_${sd}_${num}`;
               return (states[live_id]?.state === 'live') ? live_id : series_id;
             ]]]
           variables:
